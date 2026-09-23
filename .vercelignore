@@ -1,6 +1,19 @@
-*
-!index.html
-!api/
-!api/*.js
-!vercel.json
-!package.json
+# Abaikan folder/file TIDAK relevan dengan MoneyMax (deploy hanya butuh index.html + api/ + vercel.json)
+.git/
+.git-credentials
+.gitignore
+.ssh/
+.vercel/
+.vercelignore
+node_modules/
+backend/
+frontend/
+revomebfminimax
+removebg*
+hasil.png
+dante.py
+dante_bot.py
+dante_brain.json
+README.md
+*.log
+*.tmp
