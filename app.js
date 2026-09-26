@@ -298,13 +298,13 @@ function tvInit(){
   if(tvReady)return;tvReady=true;
   var tape=[
     {symbol:'OANDA:XAUUSD',proName:'OANDA:XAUUSD',title:'Gold'},
-    {symbol:'FX:USDIDR',proName:'FX:USDIDR',title:'USD/IDR'},
-    {symbol:'FX:EURUSD',proName:'FX:EURUSD',title:'EUR/USD'},
-    {symbol:'FX:USDJPY',proName:'FX:USDJPY',title:'USD/JPY'},
-    {symbol:'FX:GBPUSD',proName:'FX:GBPUSD',title:'GBP/USD'},
+    {symbol:'FX_IDC:USDIDR',proName:'FX_IDC:USDIDR',title:'USD/IDR'},
+    {symbol:'FX_IDC:EURUSD',proName:'FX_IDC:EURUSD',title:'EUR/USD'},
+    {symbol:'FX_IDC:USDJPY',proName:'FX_IDC:USDJPY',title:'USD/JPY'},
+    {symbol:'FX_IDC:GBPUSD',proName:'FX_IDC:GBPUSD',title:'GBP/USD'},
     {symbol:'BINANCE:BTCUSD',proName:'BINANCE:BTCUSD',title:'BTC/USD'},
     {symbol:'BINANCE:ETHUSD',proName:'BINANCE:ETHUSD',title:'ETH/USD'},
-    {symbol:'OANDA:XAGUSD',proName:'OANDA:XAGUSD',title:'Silver'}
+    {symbol:'TVC:SILVER',proName:'TVC:SILVER',title:'Silver'}
   ];
   var s=document.createElement('script');s.async=true;
   s.src='https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js';
