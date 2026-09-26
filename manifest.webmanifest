@@ -1,0 +1,21 @@
+{
+  "name": "MoneyMax — Konverter Mata Uang Real-Time",
+  "short_name": "MoneyMax",
+  "description": "Konversi 160+ mata uang, crypto, emas & perak — kurs live, grafik historis, gratis tanpa akun.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f4faf6",
+  "theme_color": "#059669",
+  "orientation": "portrait-primary",
+  "lang": "id-ID",
+  "categories": ["finance", "productivity", "utilities"],
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "type": "image/svg+xml",
+      "sizes": "any",
+      "purpose": "any maskable"
+    }
+  ]
+}
