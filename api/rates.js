@@ -97,13 +97,19 @@ export default async function handler(req, res) {
   // collect previous-day rates so the UI can show 24H change.
   // Pakai fawazahmed0 currency-api (kurs-nya konsisten dgn er-api, beda tipis
   // dibanding frankfurter). Hari kemarin = tanggal UTC kemarin.
+  // Keys fawazahmed0 = LOWERCASE; client pakai UPPERCASE -> normalisasi disini.
   let prev = null;
   {
     const dd = new Date();
     dd.setDate(dd.getDate() - 1);
     const iso = dd.toISOString().slice(0, 10);
     const j = await get(`https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@${iso}/v1/currencies/${base.toLowerCase()}.json`);
-    if (j && j[base.toLowerCase()]) prev = j[base.toLowerCase()];
+    if (j && j[base.toLowerCase()]) {
+      prev = {};
+      for (const k of Object.keys(j[base.toLowerCase()])) {
+        prev[k.toUpperCase()] = j[base.toLowerCase()][k];
+      }
+    }
   }
 
   for (const s of sources) {
