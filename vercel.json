@@ -4,6 +4,7 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "rewrites": [
+    { "source": "/googlef3e40f0aa77a5c44.html", "destination": "/googlef3e40f0aa77a5c44.html" },
     { "source": "/api/rates", "destination": "/api/rates" },
     { "source": "/api/history", "destination": "/api/history" }
   ],
