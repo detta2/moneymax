@@ -22,7 +22,7 @@ var STR={
   swapA:'Tukar mata uang asal dan tujuan',swapT:'Tukar posisi (S)',
   crypto:'Crypto',metal:'Logam',rangeLbl:'Rentang waktu',rangeA:'Rentang waktu grafik',
   tblFi:'Mata Uang',tblCr:'Crypto & Logam',tbl24:'Perubahan 24H',thA:'Aset',
-  seoTentang:'Tentang Konverter Mata Uang MoneyMax',
+  seoTentang:'Tentang Konverter Mata Uang MoneyMax',jumpConv:'Konverter',jumpChart:'Grafik',jumpTV:'TradingView',jumpBea:'Bea Masuk',jumpRate:'Kurs',
   bcNilaiPabean:'Nilai Pabean (CIF)',bcBea:'Bea Masuk',bcPpn:'PPN 11%',bcPph:'PPh 22 Impor',
   bcTotal:'Total Pajak',bcLanded:'Total Biaya Lengkap (barang + pajak)',
   t1:'100% Gratis',t1s:'Tanpa akun, tanpa biaya, tanpa batas konversi',
@@ -44,7 +44,7 @@ var STR={
   swapA:'Swap source and target currency',swapT:'Swap position (S)',
   crypto:'Crypto',metal:'Metal',rangeLbl:'Time range',rangeA:'Chart time range',
   tblFi:'Fiat Currencies',tblCr:'Crypto & Metals',tbl24:'24H Change',thA:'Asset',
-  seoTentang:'About the MoneyMax Currency Converter',
+  seoTentang:'About the MoneyMax Currency Converter',jumpConv:'Converter',jumpChart:'Chart',jumpTV:'TradingView',jumpBea:'Import Tax',jumpRate:'Rates',
   bcNilaiPabean:'Customs Value (CIF)',bcBea:'Import Duty',bcPpn:'VAT',bcPph:'Income Tax Art.22',
   bcTotal:'Total Tax',bcLanded:'Landed Cost (goods + tax)',
   t1:'100% Free',t1s:'No account, no fees, unlimited conversions',
@@ -84,6 +84,10 @@ function applyLang(){
  id('rangeLbl').textContent=T('rangeLbl');
  id('range').setAttribute('aria-label',T('rangeA'));
  if(tvReady)tvRender();
+ var jl={jumpConv:'jumpConv',jumpChart:'jumpChart',jumpTV:'jumpTV',jumpBea:'jumpBea',jumpRate:'jumpRate'};
+ var jb=id('jumpto');
+ if(jb){var jbt=jb.querySelectorAll('button'),k=0;
+ for(k=0;k<jbt.length;k++){var jk=jbt[k].dataset.j;if(jl[jk])jbt[k].textContent=T(jl[jk])}}
  var tr={trust1:'t1',trust1s:'t1s',trust2:'t2',trust2s:'t2s',trust3:'t3',trust3s:'t3s',trust4:'t4',trust4s:'t4s'};
  var els=document.querySelectorAll('[data-i]'),i;
  for(i=0;i<els.length;i++){var k=els[i].getAttribute('data-i');
@@ -341,6 +345,32 @@ if(st)st.addEventListener('click',function(){
   var b=id('seoBody'),open=this.getAttribute('aria-expanded')==='true';
   b.hidden=open;this.setAttribute('aria-expanded',String(!open));
 });
+
+/* ---------- jump bar: scroll cepat antar section ---------- */
+(function(){
+  var jb=id('jumpto');
+  if(!jb)return;
+  var btns=jb.querySelectorAll('button'),i;
+  var go=function(t){
+    var el=id(t);if(!el)return;
+    var y=el.getBoundingClientRect().top+window.pageYOffset-96;
+    window.scrollTo({top:y,behavior:'smooth'});
+  };
+  for(i=0;i<btns.length;i++)btns[i].addEventListener('click',function(){go(this.dataset.j)});
+  // highlight tab sesuai section yang terlihat
+  var mark=function(){
+    var best=null,bd=1/0;
+    for(i=0;i<btns.length;i++){
+      var el=id(btns[i].dataset.j);if(!el)continue;
+      var r=el.getBoundingClientRect(),d=Math.abs(r.top-110);
+      if(d<bd){bd=d;best=btns[i]}
+    }
+    if(best){for(i=0;i<btns.length;i++)btns[i].classList.toggle('on',btns[i]===best)}
+  };
+  var mt=null;
+  window.addEventListener('scroll',function(){clearTimeout(mt);mt=setTimeout(mark,120)},{passive:true});
+  mark();
+})();
 
 /* ---------- Kalkulator Bea Masuk ---------- */
 var bcSel=id('bcCcy'),bcRates={};

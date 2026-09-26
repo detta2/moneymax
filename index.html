@@ -163,9 +163,26 @@ backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
 .dot.sync{background:var(--acc2);box-shadow:0 0 12px var(--acc2)}
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.45;transform:scale(.82)}}
 .hero{text-align:center;padding:4px 6px 24px}
+/* === jump bar (navigasi cepat, hemat scroll) === */
+.jumpto{display:none;position:sticky;top:46px;z-index:55;gap:6px;overflow-x:auto;padding:8px 0 10px;
+scrollbar-width:none;-webkit-overflow-scrolling:touch;margin:0 -6px 14px}
+.jumpto::-webkit-scrollbar{display:none}
+.jumpto button{flex:none;padding:7px 14px;border-radius:999px;font-size:12.5px;font-weight:700;cursor:pointer;
+color:var(--muted);background:rgba(255,255,255,.9);border:1px solid var(--stroke2);transition:.18s;white-space:nowrap}
+.jumpto button:hover{color:var(--acc);border-color:rgba(5,150,105,.45)}
+.jumpto button.on{color:#fff;background:linear-gradient(135deg,#059669,#c9971b);border-color:transparent;
+box-shadow:0 4px 14px rgba(5,150,105,.32)}
+@media(max-width:920px){.jumpto{display:flex}}
+@media(max-width:520px){.jumpto{top:42px}}
 .hero h2{font-size:clamp(24px,4.2vw,38px);line-height:1.14;font-weight:800;letter-spacing:-.5px}
 .hero h2 em{font-style:normal;background:linear-gradient(90deg,#059669,#c9971b);-webkit-background-clip:text;background-clip:text;color:transparent}
 .hero p{color:var(--muted);margin-top:9px;font-size:14px;max-width:560px;margin-inline:auto}
+/* hero ringkas di mobile — hemat ruang layar */
+@media(max-width:640px){
+  .hero{padding:2px 4px 12px}
+  .hero h2{font-size:22px}
+  .hero p{display:none}
+}
 .grid{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1.25fr);gap:22px;align-items:start}
 @media(max-width:920px){.grid{grid-template-columns:1fr}}
 .glass{position:relative;background:linear-gradient(160deg,rgba(255,255,255,.96),rgba(248,253,250,.85));
@@ -330,6 +347,17 @@ border:1px solid rgba(201,151,27,.25);border-radius:11px;padding:9px 12px}
 .tbl-col-h{font-size:11px;letter-spacing:1.3px;text-transform:uppercase;font-weight:800;color:#065f46;
 padding:7px 12px;background:rgba(5,150,105,.08);border:1px solid var(--stroke2);border-radius:11px;margin-bottom:8px}
 @media(max-width:640px){.tbl-cols{grid-template-columns:1fr}}
+/* === compact mobile: padatkan section agar scroll tidak terlalu panjang === */
+@media(max-width:640px){
+  .card-pad{padding:14px}
+  .glass{margin-bottom:14px}
+  .scroll{max-height:230px}
+  .tv-pane,.tv-pane iframe{min-height:360px}
+  canvas{height:190px}
+  .bc-res{grid-template-columns:1fr 1fr}
+  .bc-note{font-size:10.5px}
+  section[style*="margin-top:22px"]{margin-top:14px!important}
+}
 /* === SEO collapsible === */
 .seo-toggle{width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;
 padding:0;background:none;border:0;cursor:pointer;font-size:17px;font-weight:780;color:#173d31;text-align:left}
@@ -403,6 +431,13 @@ background:linear-gradient(135deg,rgba(5,150,105,.16),rgba(201,151,27,.16));bord
     <div class="trust-item"><span class="ti-ic">🔒</span><div><b data-i="trust3">Privasi Aman</b><br><small data-i="trust3s">Tanpa cookie pelacak, tanpa penyimpanan data</small></div></div>
     <div class="trust-item"><span class="ti-ic">📈</span><div><b data-i="trust4">Grafik Historis</b><br><small data-i="trust4s">Pantau pergerakan kurs 7–90 hari</small></div></div>
   </section>
+  <nav class="jumpto" id="jumpto" aria-label="Lompat ke bagian">
+    <button data-j="converter" class="on" id="jumpConv">Konverter</button>
+    <button data-j="chartCard" id="jumpChart">Grafik</button>
+    <button data-j="tvCard" id="jumpTV">TradingView</button>
+    <button data-j="beaCard" id="jumpBea">Bea Masuk</button>
+    <button data-j="tblCard" id="jumpRate">Kurs</button>
+  </nav>
   <div class="grid">
     <section class="glass card card-pad" aria-label="Konverter" id="converter">
       <h3 id="cardTitle">Konverter</h3>
@@ -441,7 +476,7 @@ background:linear-gradient(135deg,rgba(5,150,105,.16),rgba(201,151,27,.16));bord
       </div>
       <div class="err" id="err" role="alert"></div>
     </section>
-    <section class="glass card card-pad" aria-label="Grafik pergerakan kurs">
+    <section class="glass card card-pad" id="chartCard" aria-label="Grafik pergerakan kurs">
       <div class="chart-head">
         <div><h3 id="chartTitle">USD → IDR</h3><div class="sub" id="chartSub">Pergerakan kurs historis</div></div>
         <div style="text-align:right">
@@ -458,13 +493,13 @@ background:linear-gradient(135deg,rgba(5,150,105,.16),rgba(201,151,27,.16));bord
         <button data-d="90">90H</button>
       </div>
     </section>
-    <section class="glass card card-pad tv-card" aria-label="Analisa TradingView">
+    <section class="glass card card-pad tv-card" id="tvCard" aria-label="Analisa TradingView">
       <div class="chart-head">
         <div><h3 id="tvTitle">Analisa Pasar</h3><div class="sub" id="tvSub">Grafik & indikator TradingView</div></div>
       </div>
       <div class="tv-pane" id="tvChart" role="tabpanel" aria-label="Grafik TradingView"></div>
     </section>
-    <section class="glass card card-pad" style="margin-top:22px" aria-label="Kalkulator bea masuk dan pajak impor">
+    <section class="glass card card-pad" id="beaCard" style="margin-top:22px" aria-label="Kalkulator bea masuk dan pajak impor">
       <h3 id="bcTitle">Kalkulator Bea Masuk &amp; Pajak Impor</h3>
       <div class="sub" id="bcSub">Belanja dari luar negeri? Hitung total pajaknya secara real-time</div>
       <div class="bc-grid">
@@ -491,7 +526,7 @@ background:linear-gradient(135deg,rgba(5,150,105,.16),rgba(201,151,27,.16));bord
       <div class="bc-res" id="bcOut" role="status" aria-live="polite"></div>
     </section>
   </div>
-  <section class="glass card card-pad" style="margin-top:22px" aria-label="Informasi kurs populer">
+  <section class="glass card card-pad" id="tblCard" style="margin-top:22px" aria-label="Informasi kurs populer">
     <h3 id="tblTitle">Kurs Populer</h3>
     <div class="sub" id="tblSub">Kurs tengah real-time · 1 <b id="tblBase">USD</b> =</div>
     <div class="tbl-cols">
