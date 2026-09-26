@@ -106,8 +106,13 @@ export default async function handler(req, res) {
     const j = await get(`https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@${iso}/v1/currencies/${base.toLowerCase()}.json`);
     if (j && j[base.toLowerCase()]) {
       prev = {};
-      for (const k of Object.keys(j[base.toLowerCase()])) {
-        prev[k.toUpperCase()] = j[base.toLowerCase()][k];
+      const src = j[base.toLowerCase()];
+      for (const k of Object.keys(src)) {
+        const up = k.toUpperCase();
+        // fawazahmed0 tidak mendukung logam (XAU/XAG) -> key-nya berisi nilai
+        // sampah; skip agar tidak merusak chip 24H di client.
+        if (up === 'XAU' || up === 'XAG') continue;
+        prev[up] = src[k];
       }
     }
   }
