@@ -126,9 +126,12 @@ export default async function handler(req, res) {
             let usdRate = rates['USD'] || 1;
             for (const code of Object.keys(extra)) {
               rates[code] = extra[code].usd * usdRate;
-              if (extra[code].ch !== null && extra[code].ch !== undefined) {
+              // prev crypto/logam: turunkan dari 24h change CoinGecko/gold-api.
+              // sumber fiat (fawazahmed0) tidak punya kode XAU/XAG -> jangan timpa.
+              const ch = extra[code].ch;
+              if (ch !== null && ch !== undefined && isFinite(ch)) {
                 prev = prev || {};
-                prev[code] = rates[code] / (1 + extra[code].ch / 100);
+                prev[code] = rates[code] / (1 + ch / 100);
               }
             }
           } catch (e) {}
