@@ -294,18 +294,28 @@ color:var(--muted);background:rgba(255,255,255,.7);border:1px solid var(--stroke
 .tv-tab:hover{color:var(--acc);border-color:rgba(5,150,105,.45)}
 .tv-tab.on{color:#fff;background:linear-gradient(135deg,#059669,#c9971b);border-color:transparent;
 box-shadow:0 4px 14px rgba(5,150,105,.32)}
-.tv-pane{margin-top:14px;min-height:420px;border-radius:16px;overflow:hidden;position:relative;z-index:1;
+.tv-pane{margin-top:14px;min-height:520px;border-radius:16px;overflow:hidden;position:relative;z-index:1;
 background:rgba(247,253,250,.9);border:1px solid var(--stroke2)}
-.tv-pane iframe{display:block;width:100%!important;height:100%!important;min-height:420px;border:0}
-#tvTA,#tvInfo{min-height:340px}
-#tvTA iframe,#tvInfo iframe{min-height:340px}
-.tv-cal{margin-top:14px;border-radius:16px;overflow:hidden;position:relative;z-index:1;
-border:1px solid var(--stroke2);background:rgba(247,253,250,.9)}
-.tv-cal iframe{display:block;width:100%!important;height:420px;border:0}
-@media(max-width:520px){.tv-pane,.tv-pane iframe{min-height:340px}.tv-cal iframe{height:340px}}
+.tv-pane iframe{display:block;width:100%!important;height:100%!important;min-height:520px;border:0}
+#tvTA,#tvInfo{min-height:400px}
+#tvTA iframe,#tvInfo iframe{min-height:400px}
+@media(max-width:520px){.tv-pane,.tv-pane iframe{min-height:420px}}
+.tv-cal{display:none}
 .lang-en .lang-id{display:none}
 .lang-id .lang-en{display:none}
 .lang-block{animation:none}
+/* === popular rates 2 kolom === */
+.tbl-cols{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:12px}
+.tbl-col-h{font-size:11px;letter-spacing:1.3px;text-transform:uppercase;font-weight:800;color:#065f46;
+padding:7px 12px;background:rgba(5,150,105,.08);border:1px solid var(--stroke2);border-radius:11px;margin-bottom:8px}
+@media(max-width:640px){.tbl-cols{grid-template-columns:1fr}}
+/* === SEO collapsible === */
+.seo-toggle{width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;
+padding:0;background:none;border:0;cursor:pointer;font-size:17px;font-weight:780;color:#173d31;text-align:left}
+.seo-chevron{color:var(--acc);font-size:19px;transition:transform .2s;display:inline-block}
+.seo-toggle[aria-expanded="true"] .seo-chevron{transform:rotate(180deg)}
+.seo-body{margin-top:14px}
+.seo-body h3{display:none}
 .scroll{max-height:320px;overflow-y:auto;border-radius:14px;position:relative;z-index:1}
 .scroll::-webkit-scrollbar{width:8px}
 .scroll::-webkit-scrollbar-thumb{background:rgba(5,150,105,.22);border-radius:99px}
@@ -444,14 +454,33 @@ background:linear-gradient(135deg,rgba(5,150,105,.16),rgba(201,151,27,.16));bord
   <section class="glass card card-pad" style="margin-top:22px" aria-label="Informasi kurs populer">
     <h3 id="tblTitle">Kurs Populer</h3>
     <div class="sub" id="tblSub">Kurs tengah real-time · 1 <b id="tblBase">USD</b> =</div>
-    <div class="scroll">
-      <table class="tbl">
-        <thead><tr><th scope="col" id="thC">Mata Uang</th><th scope="col" style="text-align:right" id="thR">Kurs</th><th scope="col" style="text-align:right" id="th24">Perubahan 24H</th></tr></thead>
-        <tbody id="tbody"><tr><td colspan="3"><div class="sk" style="height:14px;margin:6px 0"></div></td></tr></tbody>
-      </table>
+    <div class="tbl-cols">
+      <div class="tbl-col">
+        <div class="tbl-col-h" id="thFi">Mata Uang</div>
+        <div class="scroll">
+          <table class="tbl">
+            <thead><tr><th scope="col" id="thC">Mata Uang</th><th scope="col" style="text-align:right" id="thR">Kurs</th><th scope="col" style="text-align:right" id="th24">24H</th></tr></thead>
+            <tbody id="tbodyFiat"><tr><td colspan="3"><div class="sk" style="height:14px;margin:6px 0"></div></td></tr></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="tbl-col">
+        <div class="tbl-col-h" id="thCr">Crypto &amp; Logam</div>
+        <div class="scroll">
+          <table class="tbl">
+            <thead><tr><th scope="col" id="thC2">Aset</th><th scope="col" style="text-align:right" id="thR2">Kurs</th><th scope="col" style="text-align:right" id="th242">24H</th></tr></thead>
+            <tbody id="tbodyCr"><tr><td colspan="3"><div class="sk" style="height:14px;margin:6px 0"></div></td></tr></tbody>
+          </table>
+        </div>
+      </div>
     </div>
   </section>
   <section class="glass card card-pad seo" style="margin-top:22px">
+    <button class="seo-toggle" id="seoToggle" aria-expanded="false" aria-controls="seoBody">
+      <span data-i="seoTentang">Tentang Konverter Mata Uang MoneyMax</span>
+      <span class="seo-chevron" aria-hidden="true">⌄</span>
+    </button>
+    <div class="seo-body" id="seoBody" hidden>
     <div lang="id" class="lang-block lang-id">
     <h3>Tentang Konverter Mata Uang MoneyMax</h3>
     <p><strong>MoneyMax</strong> adalah konverter mata uang gratis yang membantu Anda melihat nilai tukar
@@ -537,11 +566,7 @@ background:linear-gradient(135deg,rgba(5,150,105,.16),rgba(201,151,27,.16));bord
     monitoring FX rates, crypto investors calculating portfolio value in Rupiah, and anyone who needs
     the latest exchange rates fast and free.</p>
     </div>
-  </section>
-  <section class="glass card card-pad" style="margin-top:22px" aria-label="Kalender ekonomi">
-    <h3 id="calTitle">Kalender Ekonomi</h3>
-    <div class="sub" id="calSub">Rilis berita &amp; data ekonomi yang menggerakkan pasar</div>
-    <div class="tv-cal" id="tvCal"></div>
+    </div>
   </section>
   <footer>
     MoneyMax · Data: open.er-api.com · frankfurter.dev · coingecko · gold-api · currency-api<br>

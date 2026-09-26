@@ -1,7 +1,7 @@
 (function(){'use strict';
 function id(x){return document.getElementById(x)}
 var amt=id('amount'),out=id('out'),rateLine=id('rateLine'),
-swap=id('swap'),cv=id('cv'),tip=id('tip'),tbody=id('tbody'),err=id('err'),
+swap=id('swap'),cv=id('cv'),tip=id('tip'),tbodyFiat=id('tbodyFiat'),tbodyCr=id('tbodyCr'),err=id('err'),
 stext=id('statusText'),dot=id('dot'),cPrice=id('chartPrice'),cChange=id('chartChange'),
 cTitle=id('chartTitle'),tblBase=id('tblBase'),amtCur=id('amtCur'),
 fromBtn=id('fromBtn'),toBtn=id('toBtn'),fromPop=id('fromPop'),toPop=id('toPop'),
@@ -21,6 +21,8 @@ var STR={
   fail:'Gagal memuat kurs: ',retry:'. Mencoba lagi…',nodata:'Data belum tersedia',
   swapA:'Tukar mata uang asal dan tujuan',swapT:'Tukar posisi (S)',
   crypto:'Crypto',metal:'Logam',rangeLbl:'Rentang waktu',rangeA:'Rentang waktu grafik',
+  tblFi:'Mata Uang',tblCr:'Crypto & Logam',tbl24:'Perubahan 24H',thA:'Aset',
+  seoTentang:'Tentang Konverter Mata Uang MoneyMax',
   t1:'100% Gratis',t1s:'Tanpa akun, tanpa biaya, tanpa batas konversi',
   t2:'Real-Time',t2s:'Kurs diperbarui otomatis setiap 60 detik',
   t3:'Privasi Aman',t3s:'Tanpa cookie pelacak, tanpa penyimpanan data',
@@ -39,6 +41,8 @@ var STR={
   fail:'Failed to load rates: ',retry:'. Retrying…',nodata:'Data not available yet',
   swapA:'Swap source and target currency',swapT:'Swap position (S)',
   crypto:'Crypto',metal:'Metal',rangeLbl:'Time range',rangeA:'Chart time range',
+  tblFi:'Fiat Currencies',tblCr:'Crypto & Metals',tbl24:'24H Change',thA:'Asset',
+  seoTentang:'About the MoneyMax Currency Converter',
   t1:'100% Free',t1s:'No account, no fees, unlimited conversions',
   t2:'Real-Time',t2s:'Rates auto-update every 60 seconds',
   t3:'Privacy Safe',t3s:'No tracking cookies, no data stored',
@@ -71,6 +75,8 @@ function applyLang(){
  id('chartSub').textContent=T('chartSub');
  id('tblTitle').textContent=T('tbl');id('tblSub').innerHTML=T('tblSub')+' <b id="tblBase">'+tblBase.textContent+'</b> =';
  id('thC').textContent=T('tblC');id('thR').textContent=T('tblR');id('th24').textContent=T('tblC24');
+ id('thC2').textContent=T('thA');id('thR2').textContent=T('tblR');id('th242').textContent=T('tbl24');
+ id('thFi').textContent=T('tblFi');id('thCr').textContent=T('tblCr');
  id('rangeLbl').textContent=T('rangeLbl');
  id('range').setAttribute('aria-label',T('rangeA'));
  if(tvReady)tvRender();
@@ -161,19 +167,21 @@ rateLine.innerHTML='1 '+fromCur+' = <b style="color:var(--acc)">'+fmt(r,4)+'</b>
 tblBase.textContent=fromCur;cTitle.textContent=fromCur+' → '+toCur}
 
 function isAsset(c){return CRYPTO.indexOf(c)>-1||METAL.indexOf(c)>-1}
-function renderTable(){var row=function(c){var r=rates[c];if(!r)return'';
+function renderTable(){
+var row=function(c){var r=rates[c];if(!r)return'';
 var p=prev[c],ch=p?(r-p)/p*100:null,ar=ch===null?'—':(ch>=0?'▲':'▼');
 var tag=isAsset(c)?(METAL.indexOf(c)>-1?' <span class="tg metal">'+T('metal')+'</span>':' <span class="tg crypto">'+T('crypto')+'</span>'):'';
 return '<tr data-c="'+c+'"><td>'+flag(c)+'<span class="nm">'+c+'</span> <span class="cd">'+esc(nm(c))+tag+'</span></td>'+
 '<td class="vl">'+fmt(r,4)+'</td><td class="vl" style="color:'+(ch===null?'var(--muted)':(ch>=0?'var(--up)':'var(--down)'))+'">'+ar+' '+(ch===null?'':Math.abs(ch).toFixed(2)+'%')+'</td></tr>'};
-var rows=P.filter(function(c){return rates[c]&&c!==fromCur});
-rows.sort(function(a,b){var A=isAsset(a)?0:1,B=isAsset(b)?0:1;return A-B});
-tbody.innerHTML=rows.map(row).join('')||
-'<tr><td colspan="3" style="color:var(--muted);text-align:center;padding:18px">'+T('nodata')+'</td></tr>';
-var rows=tbody.querySelectorAll('tr[data-c]'),i;
+var pick=function(list){return list.filter(function(c){return rates[c]&&c!==fromCur}).map(row).join('')};
+var f=pick(P.filter(function(c){return!isAsset(c)}));
+tbodyFiat.innerHTML=f||'<tr><td colspan="3" style="color:var(--muted);text-align:center;padding:18px">'+T('nodata')+'</td></tr>';
+tbodyCr.innerHTML=pick(CRYPTO.concat(METAL))||'<tr><td colspan="3" style="color:var(--muted);text-align:center;padding:18px">'+T('nodata')+'</td></tr>';
+var bind=function(tb){var rows=tb.querySelectorAll('tr[data-c]'),i;
 for(i=0;i<rows.length;i++)rows[i].addEventListener('click',function(){
 toCur=this.dataset.c;toCode.textContent=toCur;toName.textContent=nm(toCur);
-convert();loadHist();saveState();window.scrollTo({top:0,behavior:'smooth'})})}
+convert();loadHist();saveState();if(tvReady)tvRender();window.scrollTo({top:0,behavior:'smooth'})})};
+bind(tbodyFiat);bind(tbodyCr)}
 
 function draw(){var ctx=cv.getContext('2d'),dpr=window.devicePixelRatio||1,W=cv.clientWidth,H=cv.clientHeight;
 cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,W,H);
@@ -245,8 +253,7 @@ stext.textContent=T('live')+' '+new Date().toLocaleTimeString(LANG==='en'?'en-US
 .catch(function(e){loading=false;busy=false;showErr(T('fail')+e.message+T('retry'))})
 .finally(function(){dot.classList.remove('sync')})}
 function tick(){refreshIn--;if(refreshIn<=0){loadRates();return}
-if(!busy)stext.textContent=T('refresh')+' '+refreshIn+'s';
-if(!tvReady&&typeof TradingView!=='undefined'){tvReady=true;tvInit()}}
+if(!busy)stext.textContent=T('refresh')+' '+refreshIn+'s'}
 setInterval(tick,1000);
 
 /* ---------- TradingView ---------- */
@@ -260,11 +267,11 @@ function tvSymbol(a,b){
 }
 var tvCur='',tvReady=false;
 function tvLoad(kind,sym,host,extra){
-  var c=document.createElement('div');c.className='tradingview-widget-container__widget';
+  host.innerHTML='<div class="tradingview-widget-container__widget"></div>';
   var s=document.createElement('script');s.async=true;s.type='text/javascript';
   s.src='https://s3.tradingview.com/external-embedding/embed-widget-'+kind+'.js';
   s.innerHTML=JSON.stringify(Object.assign({symbol:sym,colorTheme:'light',isTransparent:true,locale:LANG==='en'?'en':'id_ID'},extra||{}));
-  host.innerHTML='';host.appendChild(c);host.appendChild(s);
+  host.appendChild(s);
 }
 function tvRender(){
   if(!tvReady)return;
@@ -286,6 +293,7 @@ function tvTabs(){
   });
 }
 function tvInit(){
+  if(tvReady)return;tvReady=true;
   var tape=[
     {symbol:'OANDA:XAUUSD',proName:'OANDA:XAUUSD',title:'Gold'},
     {symbol:'FX:USDIDR',proName:'FX:USDIDR',title:'USD/IDR'},
@@ -300,10 +308,6 @@ function tvInit(){
   s.src='https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js';
   s.innerHTML=JSON.stringify({symbols:tape,showSymbolLogo:true,isTransparent:false,displayMode:'adaptive',colorTheme:'dark',locale:LANG==='en'?'en':'id_ID'});
   id('tvTape').appendChild(s);
-  var cal=document.createElement('script');cal.async=true;
-  cal.src='https://s3.tradingview.com/external-embedding/embed-widget-events.js';
-  cal.innerHTML=JSON.stringify({colorTheme:'light',isTransparent:true,width:'100%',height:'420',locale:LANG==='en'?'en':'id_ID'});
-  id('tvCal').appendChild(cal);
   tvTabs();tvRender();
 }
 
@@ -328,7 +332,11 @@ for(var j=0;j<rb.length;j++){rb[j].classList.remove('on');rb[j].setAttribute('ar
 this.classList.add('on');this.setAttribute('aria-pressed','true');loadHist()});
 window.addEventListener('resize',function(){clearTimeout(timer);timer=setTimeout(draw,150)});
 
-function tvBooted(){if(!tvReady&&typeof TradingView!=='undefined'){tvReady=true;tvInit();return true}return false}
-tvBooted();
-loadState();loadLang();applyLang();bindLang();loadRates();tvBooted();
+tvInit();
+loadState();loadLang();applyLang();bindLang();loadRates();
+var st=id('seoToggle');
+if(st)st.addEventListener('click',function(){
+  var b=id('seoBody'),open=this.getAttribute('aria-expanded')==='true';
+  b.hidden=open;this.setAttribute('aria-expanded',String(!open));
+});
 })();
