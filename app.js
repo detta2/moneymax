@@ -191,7 +191,7 @@ toCur=this.dataset.c;toCode.textContent=toCur;toName.textContent=nm(toCur);
 convert();loadHist();saveState();if(tvReady)tvRender();window.scrollTo({top:0,behavior:'smooth'})})};
 bind(tbodyFiat);bind(tbodyCr)}
 
-function draw(){var ctx=cv.getContext('2d'),dpr=window.devicePixelRatio||1,W=cv.clientWidth,H=cv.clientHeight;
+function draw(){if(!cvVisible)return;var ctx=cv.getContext('2d'),dpr=window.devicePixelRatio||1,W=cv.clientWidth,H=cv.clientHeight;
 cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,W,H);
 if(!hist.length){ctx.fillStyle='rgba(5,150,105,.55)';ctx.font='13px sans-serif';ctx.textAlign='center';
 ctx.fillText('Memuat data grafik…',W/2,H/2);return}
@@ -337,6 +337,15 @@ days=+this.dataset.d;
 for(var j=0;j<rb.length;j++){rb[j].classList.remove('on');rb[j].setAttribute('aria-pressed','false')}
 this.classList.add('on');this.setAttribute('aria-pressed','true');loadHist()});
 window.addEventListener('resize',function(){clearTimeout(timer);timer=setTimeout(draw,150)});
+// hemat CPU: skip redraw canvas saat tidak terlihat (di luar viewport)
+var cvVisible=true;
+if('IntersectionObserver' in window){
+  new IntersectionObserver(function(es){
+    var was=cvVisible;
+    cvVisible=es[0].isIntersecting;
+    if(!was&&cvVisible)draw();   // redraw saat kembali terlihat
+  },{threshold:0.05}).observe(cv);
+}
 
 tvInit();
 loadState();loadLang();applyLang();bindLang();loadRates();
