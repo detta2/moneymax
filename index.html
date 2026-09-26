@@ -241,10 +241,6 @@ text-shadow:0 0 40px rgba(5,150,105,.15);word-break:break-all;font-variant-numer
 background:rgba(255,255,255,.7);border:1px solid var(--stroke2);transition:.18s;display:flex;align-items:center;gap:5px}
 .fav button:hover{color:var(--acc);background:rgba(5,150,105,.12);border-color:rgba(5,150,105,.4)}
 .fav button .star{color:#c9971b}
-.quick{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;position:relative;z-index:1}
-.quick button{padding:7px 13px;border-radius:11px;font-size:12px;font-weight:700;cursor:pointer;color:var(--muted);
-background:rgba(255,255,255,.7);border:1px solid var(--stroke2);transition:.18s;font-variant-numeric:tabular-nums}
-.quick button:hover{color:var(--acc);background:rgba(5,150,105,.12);border-color:rgba(5,150,105,.4);transform:translateY(-1px)}
 .chart-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:14px;flex-wrap:wrap;position:relative;z-index:1}
 .chart-price{font-size:25px;font-weight:800;letter-spacing:-.4px;font-variant-numeric:tabular-nums}
 .chart-change{font-size:12.5px;font-weight:700;padding:5px 11px;border-radius:999px;margin-top:4px;display:inline-block}
@@ -391,7 +387,6 @@ background:linear-gradient(135deg,rgba(5,150,105,.16),rgba(201,151,27,.16));bord
         <div class="val" id="out" aria-live="polite">—</div>
         <div class="rate" id="rateLine">—</div>
       </div>
-      <div class="quick" id="quick" aria-label="Nilai cepat"></div>
       <div class="err" id="err" role="alert"></div>
     </section>
     <section class="glass card card-pad" aria-label="Grafik pergerakan kurs">

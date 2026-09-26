@@ -261,11 +261,7 @@ var done=function(){showToast(T('copyOk')+': '+t2+' '+toCur)};
 if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t2+' '+toCur).then(done).catch(done)}
 else{var ta=document.createElement('textarea');ta.value=t2+' '+toCur;document.body.appendChild(ta);ta.select();
 try{document.execCommand('copy')}catch(e){}ta.remove();done()}});
-id('quick').innerHTML=['100','500','1000','5000','10000','100000'].map(function(v){
-return '<button data-v="'+v+'">'+fmt(+v,0)+'</button>'}).join('');
-var qb=id('quick').querySelectorAll('button'),i;
-for(i=0;i<qb.length;i++)qb[i].addEventListener('click',function(){amt.value=this.dataset.v;convert()});
-var rb=id('range').querySelectorAll('button');
+var rb=id('range').querySelectorAll('button'),i;
 for(i=0;i<rb.length;i++)rb[i].addEventListener('click',function(){
 days=+this.dataset.d;
 for(var j=0;j<rb.length;j++){rb[j].classList.remove('on');rb[j].setAttribute('aria-pressed','false')}
