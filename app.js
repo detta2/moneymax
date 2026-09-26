@@ -10,7 +10,7 @@ fromCode=id('fromCode'),toCode=id('toCode'),fromName=id('toName')?id('fromName')
 toName=id('toName'),toast=id('toast');
 
 /* ---------- i18n ---------- */
-var LANG='id';
+var LANG='en';
 var STR={
  id:{conv:'Konverter',subAmount:'Masukkan jumlah, lalu pilih mata uangnya',clear:'Bersihkan jumlah',
   amtA:'Jumlah mata uang yang ingin dikonversi',fromA:'Pilih mata uang asal',toA:'Pilih mata uang tujuan',
@@ -174,7 +174,7 @@ function isAsset(c){return CRYPTO.indexOf(c)>-1||METAL.indexOf(c)>-1}
 function renderTable(){
 var row=function(c){var r=rates[c];if(!r)return'';
 var p=prev[c],ch=p?(r-p)/p*100:null,ar=ch===null?'—':(ch>=0?'▲':'▼');
-var tag=isAsset(c)?(METAL.indexOf(c)>-1?' <span class="tg metal">'+T('metal')+'</span>':' <span class="tg crypto">'+T('crypto')+'</span>'):'';
+var tag=isAsset(c)?(METAL.indexOf(c)>-1?' <span class="tg metal">'+T('metal')+'</span>':(' <span class="tg crypto">'+T('crypto')+'</span>')):'';
 return '<tr data-c="'+c+'"><td>'+flag(c)+'<span class="nm">'+c+'</span> <span class="cd">'+esc(nm(c))+tag+'</span></td>'+
 '<td class="vl">'+fmt(r,4)+'</td><td class="vl" style="color:'+(ch===null?'var(--muted)':(ch>=0?'var(--up)':'var(--down)'))+'">'+ar+' '+(ch===null?'':Math.abs(ch).toFixed(2)+'%')+'</td></tr>'};
 var pick=function(list){return list.filter(function(c){return rates[c]&&c!==fromCur}).map(row).join('')};
@@ -285,17 +285,6 @@ function tvRender(){
   id('tvTitle').textContent=nm(fromCur)+' / '+nm(toCur);
   id('tvSub').textContent=LANG==='en'?'TradingView chart & indicators':'Grafik & indikator TradingView';
   tvLoad('advanced-chart',sym,id('tvChart'),{autosize:true,timezone:'Asia/Jakarta',interval:'D',style:'1'});
-  tvLoad('technical-analysis',sym,id('tvTA'),{width:'100%',height:'340'});
-  tvLoad('symbol-info',sym,id('tvInfo'),{width:'100%',height:'340'});
-}
-function tvTabs(){
-  var tb=id('tvChart').parentElement.querySelectorAll('.tv-tab'),i;
-  for(i=0;i<tb.length;i++)tb[i].addEventListener('click',function(){
-    for(var j=0;j<tb.length;j++){tb[j].classList.remove('on');tb[j].setAttribute('aria-selected','false')}
-    this.classList.add('on');this.setAttribute('aria-selected','true');
-    var p=this.dataset.t;
-    id('tvChart').hidden=(p!=='chart');id('tvTA').hidden=(p!=='ta');id('tvInfo').hidden=(p!=='info');
-  });
 }
 function tvInit(){
   if(tvReady)return;tvReady=true;
@@ -313,7 +302,7 @@ function tvInit(){
   s.src='https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js';
   s.innerHTML=JSON.stringify({symbols:tape,showSymbolLogo:true,isTransparent:false,displayMode:'adaptive',colorTheme:'dark',locale:LANG==='en'?'en':'id_ID'});
   id('tvTape').appendChild(s);
-  tvTabs();tvRender();
+  tvRender();
 }
 
 function doSwap(){var t=fromCur;fromCur=toCur;toCur=t;
