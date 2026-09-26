@@ -6,34 +6,88 @@ stext=id('statusText'),dot=id('dot'),cPrice=id('chartPrice'),cChange=id('chartCh
 cTitle=id('chartTitle'),tblBase=id('tblBase'),amtCur=id('amtCur'),
 fromBtn=id('fromBtn'),toBtn=id('toBtn'),fromPop=id('fromPop'),toPop=id('toPop'),
 fromItems=id('fromItems'),toItems=id('toItems'),fromSearch=id('fromSearch'),toSearch=id('toSearch'),
-fromCode=id('fromCode'),toCode=id('toCode'),fromName=id('fromName'),toName=id('toName'),
-toast=id('toast'),favBox=id('fav');
+fromCode=id('fromCode'),toCode=id('toCode'),fromName=id('toName')?id('fromName'):null,
+toName=id('toName'),toast=id('toast');
 
-var F={'USD':'🇺🇸','EUR':'🇪🇺','IDR':'🇮🇩','JPY':'🇯🇵','GBP':'🇬🇧','AUD':'🇦🇺','CAD':'🇨🇦','CHF':'🇨🇭','CNY':'🇨🇳','SGD':'🇸🇬','MYR':'🇲🇾','THB':'🇹🇭','KRW':'🇰🇷','HKD':'🇭🇰','INR':'🇮🇳','AED':'🇦🇪','SAR':'🇸🇦','NZD':'🇳🇿','SEK':'🇸🇪','NOK':'🇳🇴','DKK':'🇩🇰','RUB':'🇷🇺','CZK':'🇨🇿','PLN':'🇵🇱','TRY':'🇹🇷','BRL':'🇧🇷','MXN':'🇲🇽','ZAR':'🇿🇦','PHP':'🇵🇭','VND':'🇻🇳','PKR':'🇵🇰','BDT':'🇧🇩','NGN':'🇳🇬','EGP':'🇪🇬','KES':'🇰🇪','MAD':'🇲🇦','HUF':'🇭🇺','RON':'🇷🇴','BGN':'🇧🇬','HRK':'🇭🇷','ISK':'🇮🇸','ILS':'🇮🇱','JOD':'🇯🇴','KWD':'🇰🇼','QAR':'🇶🇦','OMR':'🇴🇲','BHD':'🇧🇭','LKR':'🇱🇰','NPR':'🇳🇵','MMK':'🇲🇲','KHR':'🇰🇭','LAK':'🇱🇦','TWD':'🇹🇼','BTC':'₿','ETH':'Ξ','SOL':'◎','BNB':'⬡','XRP':'✕','DOGE':'Ð','USDT':'₮','TRX':'◈','ADA':'₳','LINK':'⬢','XAU':'🥇','XAG':'🥈'};
+/* ---------- i18n ---------- */
+var LANG='id';
+var STR={
+ id:{conv:'Konverter',subAmount:'Input jumlah, pilih pasangan mata uang',clear:'Bersihkan jumlah',
+  search:'Cari mata uang…',res:'Hasil Konversi',copy:'⧉ Salin',copyA:'Salin hasil konversi',copyOk:'Disalin',
+  noRes:'Belum ada hasil',favHint:'Pasangan favorit',chartSub:'Pergerakan kurs historis',
+  tbl:'Kurs Populer',tblSub:'Kurs tengah real-time · 1',tblC:'Mata Uang',tblR:'Kurs',tblC24:'Perubahan 24H',
+  loading:'Memuat kurs live…',sync:'Sinkron grafik…',live:'Live · diperbarui',refresh:'Live · refresh',
+  fail:'Gagal memuat kurs: ',retry:'. Mencoba lagi…',nodata:'Data belum tersedia',
+  noHist:'Memuat data grafik…',swapA:'Tukar mata uang asal dan tujuan',swapT:'Tukar posisi (S)',
+  crypto:'Crypto',metal:'Logam',up:'Naik',down:'Turun',heroT:'Konversi Mata Uang,',heroE:'Crypto & Emas',
+  heroP:'160+ mata uang dunia, 10 crypto, emas & perak — kurs live, grafik historis, auto-refresh 60 detik.',
+  langBtn:'English'},
+ en:{conv:'Converter',subAmount:'Enter amount, choose currency pair',clear:'Clear amount',
+  search:'Search currency…',res:'Conversion Result',copy:'⧉ Copy',copyA:'Copy conversion result',copyOk:'Copied',
+  noRes:'No result yet',favHint:'Favorite pairs',chartSub:'Historical rate movement',
+  tbl:'Popular Rates',tblSub:'Real-time mid rate · 1',tblC:'Currency',tblR:'Rate',tblC24:'24H Change',
+  loading:'Loading live rates…',sync:'Syncing chart…',live:'Live · updated',refresh:'Live · refresh in',
+  fail:'Failed to load rates: ',retry:'. Retrying…',nodata:'Data not available yet',
+  noHist:'Loading chart data…',swapA:'Swap source and target currency',swapT:'Swap position (S)',
+  crypto:'Crypto',metal:'Metal',up:'Up',down:'Down',heroT:'Convert Currency,',heroE:'Crypto & Gold',
+  heroP:'160+ world currencies, 10 crypto, gold & silver — live rates, historical chart, auto-refresh every 60s.',
+  langBtn:'Bahasa Indonesia'}
+};
+function T(k){var v=(STR[LANG]||STR.id)[k];return v===undefined?k:v}
+function t(x){return x}
+function applyLang(){
+ var h2=id('heroT'),he=id('heroE'),hp=id('heroP');
+ if(h2)h2.textContent=T('heroT');if(he)he.textContent=T('heroE');if(hp)hp.textContent=T('heroP');
+ if(id('cardTitle'))id('cardTitle').textContent=T('conv');
+ if(id('cardSub'))id('cardSub').textContent=T('subAmount');
+ amt.setAttribute('aria-label',T('clear').replace('Bersihkan ','')||'Amount');
+ id('clr').setAttribute('aria-label',T('clear'));
+ id('clr').setAttribute('title',T('clear'));
+ fromSearch.placeholder=T('search');toSearch.placeholder=T('search');
+ fromBtn.setAttribute('aria-label',T('swapA'));
+ swap.setAttribute('aria-label',T('swapA'));swap.setAttribute('title',T('swapT'));
+ id('resLbl').textContent=T('res');
+ id('copy').textContent=T('copy');id('copy').setAttribute('aria-label',T('copyA'));
+ id('chartSub').textContent=T('chartSub');
+ id('tblTitle').textContent=T('tbl');id('tblSub').innerHTML=T('tblSub')+' <b id="tblBase">'+tblBase.textContent+'</b> =';
+ id('thC').textContent=T('tblC');id('thR').textContent=T('tblR');id('th24').textContent=T('tblC24');
+ var lb=id('langBtn');if(lb)lb.textContent=T('langBtn');
+}
+function setLang(l){LANG=(l==='en')?'en':'id';applyLang();renderItemsAll();saveLang();
+ if(!loading)loadHist();
+}
+function saveLang(){try{localStorage.setItem('moneymax.lang',LANG)}catch(e){}}
+function loadLang(){try{var l=localStorage.getItem('moneymax.lang');if(l==='en'||l==='id')LANG=l}catch(e){}}
+function bindLang(){var b=id('langBtn');if(b)b.addEventListener('click',function(){setLang(LANG==='id'?'en':'id')})}
+
+
 var N={'USD':'Dolar AS','EUR':'Euro','IDR':'Rupiah','JPY':'Yen Jepang','GBP':'Pound Inggris','AUD':'Dolar Australia','CAD':'Dolar Kanada','CHF':'Franc Swiss','CNY':'Yuan Cina','SGD':'Dolar Singapura','MYR':'Ringgit','THB':'Baht','KRW':'Won Korsel','HKD':'Dolar Hong Kong','INR':'Rupee India','AED':'Dirham','SAR':'Riyal','NZD':'Dolar Selandia','SEK':'Krona Swedia','NOK':'Krone Norwegia','DKK':'Krone Denmark','RUB':'Rubel Rusia','CZK':'Koruna','PLN':'Zloty','TRY':'Lira Turki','BRL':'Real Brazil','MXN':'Peso Meksiko','ZAR':'Rand Afrika','PHP':'Peso Filipina','VND':'Dong Vietnam','PKR':'Rupee Pakistan','BDT':'Taka','NGN':'Naira','EGP':'Pound Mesir','KES':'Shilling Kenya','MAD':'Dirham Maroko','HUF':'Forint','RON':'Leu Rumania','BGN':'Lev Bulgaria','HRK':'Kuna','ISK':'Krona Islandia','ILS':'Shekel','JOD':'Dinar Yordania','KWD':'Dinar Kuwait','QAR':'Riyal Qatar','OMR':'Rial Oman','BHD':'Dinar Bahrain','LKR':'Rupee Sri Lanka','NPR':'Rupee Nepal','MMK':'Kyat','KHR':'Riel','LAK':'Kip','TWD':'Dolar Taiwan','BTC':'Bitcoin','ETH':'Ethereum','SOL':'Solana','BNB':'BNB','XRP':'XRP','DOGE':'Dogecoin','USDT':'Tether USD','TRX':'TRON','ADA':'Cardano','LINK':'Chainlink','XAU':'Emas (per tr oz)','XAG':'Perak (per tr oz)'};
+var NE={'USD':'US Dollar','EUR':'Euro','IDR':'Rupiah','JPY':'Japanese Yen','GBP':'British Pound','AUD':'Australian Dollar','CAD':'Canadian Dollar','CHF':'Swiss Franc','CNY':'Chinese Yuan','SGD':'Singapore Dollar','MYR':'Ringgit','THB':'Baht','KRW':'South Korean Won','HKD':'Hong Kong Dollar','INR':'Indian Rupee','AED':'Dirham','SAR':'Riyal','NZD':'New Zealand Dollar','SEK':'Swedish Krona','NOK':'Norwegian Krone','DKK':'Danish Krone','RUB':'Russian Ruble','CZK':'Koruna','PLN':'Zloty','TRY':'Turkish Lira','BRL':'Brazilian Real','MXN':'Mexican Peso','ZAR':'South African Rand','PHP':'Philippine Peso','VND':'Vietnamese Dong','PKR':'Pakistani Rupee','BDT':'Taka','NGN':'Naira','EGP':'Egyptian Pound','KES':'Kenyan Shilling','MAD':'Moroccan Dirham','HUF':'Forint','RON':'Romanian Leu','BGN':'Bulgarian Lev','HRK':'Kuna','ISK':'Icelandic Krona','ILS':'Shekel','JOD':'Jordanian Dinar','KWD':'Kuwaiti Dinar','QAR':'Qatari Riyal','OMR':'Omani Rial','BHD':'Bahraini Dinar','LKR':'Sri Lankan Rupee','NPR':'Nepalese Rupee','MMK':'Kyat','KHR':'Riel','LAK':'Kip','TWD':'Taiwan Dollar','BTC':'Bitcoin','ETH':'Ethereum','SOL':'Solana','BNB':'BNB','XRP':'XRP','DOGE':'Dogecoin','USDT':'Tether USD','TRX':'TRON','ADA':'Cardano','LINK':'Chainlink','XAU':'Gold (per troy oz)','XAG':'Silver (per troy oz)'};
+function nm(c){return LANG==='en'?(NE[c]||N[c]||c):(N[c]||c)}
 var P=['USD','EUR','IDR','JPY','GBP','AUD','CAD','CHF','CNY','SGD','MYR','THB','KRW','HKD','INR','AED','SAR','NZD','SEK','NOK','DKK','RUB','CZK','PLN','TRY','BRL','MXN','ZAR','PHP','VND','PKR','BDT','NGN','EGP','KES','MAD','HUF','RON','BGN','HRK','ISK','ILS','JOD','KWD','QAR','OMR','BHD','LKR','NPR','MMK','KHR','LAK','TWD','BTC','ETH','SOL','BNB','XRP','DOGE','USDT','TRX','ADA','LINK','XAU','XAG'];
 var CRYPTO=['BTC','ETH','SOL','BNB','XRP','DOGE','USDT','TRX','ADA','LINK'],METAL=['XAU','XAG'];
 var rates={},days=30,hist=[],prev={},loading=true,fromCur='USD',toCur='IDR',hover=-1,errT=null,timer=null,toastT=null;
 
 function fmt(n,d){if(!isFinite(n))return'—';d=d||2;
 var dd=Math.abs(n)>=1000?2:(Math.abs(n)>=1?4:6);
-return n.toLocaleString('id-ID',{minimumFractionDigits:Math.min(d,dd),maximumFractionDigits:dd})}
+return n.toLocaleString(LANG==='en'?'en-US':'id-ID',{minimumFractionDigits:Math.min(d,dd),maximumFractionDigits:dd})}
 function esc(s){return String(s).replace(/[&<>\"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
-function flag(c){return '<span class="flag">'+(F[c]||'🏳️')+'</span>'}
+function flag(c){return '<span class="flag">'+iconFor(c)+'</span>'}
 function showToast(m){toast.textContent=m;toast.classList.add('show');clearTimeout(toastT);
 toastT=setTimeout(function(){toast.classList.remove('show')},1800)}
 function showErr(m){err.textContent=m;err.classList.add('show');clearTimeout(errT);
 errT=setTimeout(function(){err.classList.remove('show')},4500)}
 
 /* ---------- Searchable currency picker ---------- */
-var NAMES=Object.keys(N).map(function(c){return {code:c,name:N[c]}}).sort(function(a,b){return a.code<b.code?-1:1});
+var NAMES=P.map(function(c){return {code:c,name:nm(c),sortKey:c}}).sort(function(a,b){return a.code<b.code?-1:1});
+function renderItemsAll(){renderItems(fromItems,fromSearch,fromCur);renderItems(toItems,toSearch,toCur)}
 function renderItems(box,input,cur){
   var q=input.value.trim().toUpperCase();
   var list=NAMES.filter(function(x){
     if(!q)return true;
     return x.code.indexOf(q)===0||x.name.toUpperCase().indexOf(q)>-1;
   });
-  if(!list.length){box.innerHTML='<div class="ccy-empty">Tidak ditemukan: '+esc(input.value)+'</div>';return}
+  if(!list.length){box.innerHTML='<div class="ccy-empty">'+T('nodata')+': '+esc(input.value)+'</div>';return}
   box.innerHTML=list.map(function(x){
     return '<button class="ccy-item'+(x.code===cur?' sel':'')+'" data-c="'+x.code+'" role="option" aria-selected="'+(x.code===cur)+'">'+
     flag(x.code)+'<span class="code">'+x.code+'</span><span class="nm">'+esc(x.name)+'</span></button>';
@@ -41,9 +95,9 @@ function renderItems(box,input,cur){
   var rows=box.querySelectorAll('.ccy-item'),i;
   for(i=0;i<rows.length;i++)rows[i].addEventListener('click',function(){
     var c=this.dataset.c;
-    if(input===fromSearch){fromCur=c;fromCode.textContent=c;fromName.textContent=N[c]||c;rates={};loading=true;loadRates()}
-    else{toCur=c;toCode.textContent=c;toName.textContent=N[c]||c;convert();loadHist()}
-    closeAll();pushFav();saveState();
+    if(input===fromSearch){fromCur=c;fromCode.textContent=c;fromName.textContent=nm(c);rates={};loading=true;loadRates()}
+    else{toCur=c;toCode.textContent=c;toName.textContent=nm(c);convert();loadHist()}
+    closeAll();saveState();
   });
 }
 function openPop(pop,btn,box,input,cur){closeAll();pop.classList.add('open');btn.setAttribute('aria-expanded','true');
@@ -61,38 +115,12 @@ document.addEventListener('keydown',function(e){
   if(e.key.toLowerCase()==='s'&&!/input|select|textarea/i.test((e.target.tagName||''))&&!e.metaKey&&!e.ctrlKey&&!e.altKey){doSwap();e.preventDefault()}
 });
 
-/* ---------- Favorites ---------- */
-function loadFavs(){try{return JSON.parse(localStorage.getItem('moneymax.favs')||'["USD-IDR"]')}catch(e){return ['USD-IDR']}}
-function saveFavs(f){try{localStorage.setItem('moneymax.favs',JSON.stringify(f))}catch(e){}}
-function pushFav(){
-  var f=loadFavs(),k=fromCur+'-'+toCur;
-  f=[k].concat(f.filter(function(x){return x!==k})).slice(0,6);
-  saveFavs(f);renderFavs();
-}
-function renderFavs(){
-  var f=loadFavs();
-  favBox.querySelectorAll('button[data-p]').forEach(function(b){b.remove()});
-  f.forEach(function(k){
-    var p=k.split('-');if(p.length!==2)return;
-    var b=document.createElement('button');
-    b.dataset.p=k;b.setAttribute('aria-label','Pasangan '+p[0]+' ke '+p[1]);
-    b.innerHTML=flag(p[0])+'<span>'+p[0]+'→'+p[1]+'</span>';
-    b.addEventListener('click',function(){
-      fromCur=p[0];toCur=p[1];
-      fromCode.textContent=p[0];toCode.textContent=p[1];
-      fromName.textContent=N[p[0]]||p[0];toName.textContent=N[p[1]]||p[1];
-      rates={};loading=true;loadRates();saveState();
-    });
-    favBox.appendChild(b);
-  });
-}
-
 /* ---------- Persist last pair ---------- */
 function saveState(){try{localStorage.setItem('moneymax.pair',JSON.stringify({f:fromCur,t:toCur}))}catch(e){}}
 function loadState(){try{var s=JSON.parse(localStorage.getItem('moneymax.pair')||'null');
-  if(s&&N[s.f]&&N[s.t]){fromCur=s.f;toCur=s.t;
-  fromCode.textContent=s.f;toCode.textContent=s.t;
-  fromName.textContent=N[s.f];toName.textContent=N[s.t]}}catch(e){}}
+  if(s){if(N[s.f])fromCur=s.f;if(N[s.t])toCur=s.t;
+  fromCode.textContent=fromCur;toCode.textContent=toCur;
+  fromName.textContent=nm(fromCur);toName.textContent=nm(toCur)}}catch(e){}}
 
 function convert(){if(loading||!rates[toCur]){out.textContent='—';return}
 var a=parseFloat(amt.value)||0,r=rates[toCur];
@@ -105,18 +133,17 @@ tblBase.textContent=fromCur;cTitle.textContent=fromCur+' → '+toCur}
 function isAsset(c){return CRYPTO.indexOf(c)>-1||METAL.indexOf(c)>-1}
 function renderTable(){var row=function(c){var r=rates[c];if(!r)return'';
 var p=prev[c],ch=p?(r-p)/p*100:null,ar=ch===null?'—':(ch>=0?'▲':'▼');
-var tag=isAsset(c)?(METAL.indexOf(c)>-1?' <span class="tg metal">Logam</span>':' <span class="tg crypto">Crypto</span>'):'';
-return '<tr data-c="'+c+'"><td>'+flag(c)+'<span class="nm">'+c+'</span> <span class="cd">'+esc(N[c]||'')+tag+'</span></td>'+
+var tag=isAsset(c)?(METAL.indexOf(c)>-1?' <span class="tg metal">'+T('metal')+'</span>':' <span class="tg crypto">'+T('crypto')+'</span>'):'';
+return '<tr data-c="'+c+'"><td>'+flag(c)+'<span class="nm">'+c+'</span> <span class="cd">'+esc(nm(c))+tag+'</span></td>'+
 '<td class="vl">'+fmt(r,4)+'</td><td class="vl" style="color:'+(ch===null?'var(--muted)':(ch>=0?'var(--up)':'var(--down)'))+'">'+ar+' '+(ch===null?'':Math.abs(ch).toFixed(2)+'%')+'</td></tr>'};
 var rows=P.filter(function(c){return rates[c]&&c!==fromCur});
-// crypto & metals first, then fiat
 rows.sort(function(a,b){var A=isAsset(a)?0:1,B=isAsset(b)?0:1;return A-B});
 tbody.innerHTML=rows.map(row).join('')||
-'<tr><td colspan="3" style="color:var(--muted);text-align:center;padding:18px">Data belum tersedia</td></tr>';
+'<tr><td colspan="3" style="color:var(--muted);text-align:center;padding:18px">'+T('nodata')+'</td></tr>';
 var rows=tbody.querySelectorAll('tr[data-c]'),i;
 for(i=0;i<rows.length;i++)rows[i].addEventListener('click',function(){
-toCur=this.dataset.c;toCode.textContent=toCur;toName.textContent=N[toCur]||toCur;
-convert();loadHist();pushFav();saveState();window.scrollTo({top:0,behavior:'smooth'})})}
+toCur=this.dataset.c;toCode.textContent=toCur;toName.textContent=nm(toCur);
+convert();loadHist();saveState();window.scrollTo({top:0,behavior:'smooth'})})}
 
 function draw(){var ctx=cv.getContext('2d'),dpr=window.devicePixelRatio||1,W=cv.clientWidth,H=cv.clientHeight;
 cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,W,H);
@@ -174,34 +201,34 @@ cv.addEventListener('mouseleave',function(){hover=-1;tip.style.opacity=0;draw()}
 cv.addEventListener('touchend',function(){hover=-1;tip.style.opacity=0;draw()});
 
 function loadHist(){var u='/api/history?base='+fromCur+'&target='+toCur+'&days='+days;
-stext.textContent='Sinkron grafik…';dot.classList.add('sync');
+stext.textContent=T('sync');dot.classList.add('sync');
 fetch(u).then(function(r){return r.json()}).then(function(d){
 hist=d.points||[];draw()}).catch(function(){hist=[];draw()}).finally(function(){
-stext.textContent='Live · '+fromCur+'/'+toCur;dot.classList.remove('sync')})}
+stext.textContent=T('live')+' '+fromCur+'/'+toCur;dot.classList.remove('sync')})}
 
 var refreshIn=60;
-function loadRates(){stext.textContent='Memuat kurs live…';dot.classList.add('sync');
+function loadRates(){stext.textContent=T('loading');dot.classList.add('sync');
 fetch('/api/rates?base='+fromCur).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json()})
 .then(function(d){rates=d.rates||{};prev=d.prev||{};loading=false;
 convert();renderTable();loadHist();refreshIn=60;
-stext.textContent='Live · diperbarui '+new Date().toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit',second:'2-digit'})})
-.catch(function(e){loading=false;showErr('Gagal memuat kurs: '+e.message+'. Mencoba lagi…')})
+stext.textContent=T('live')+' '+new Date().toLocaleTimeString(LANG==='en'?'en-US':'id-ID',{hour:'2-digit',minute:'2-digit',second:'2-digit'})})
+.catch(function(e){loading=false;showErr(T('fail')+e.message+T('retry'))})
 .finally(function(){dot.classList.remove('sync')})}
 function tick(){refreshIn--;if(refreshIn<=0){loadRates();return}
-if(!/Sinkron|Memuat/.test(stext.textContent))stext.textContent='Live · refresh '+refreshIn+'s';}
+if(!/Sinkron|Memuat|Sync|Load/.test(stext.textContent))stext.textContent=T('refresh')+' '+refreshIn+'s';}
 setInterval(tick,1000);
 
 function doSwap(){var t=fromCur;fromCur=toCur;toCur=t;
 fromCode.textContent=fromCur;toCode.textContent=toCur;
-fromName.textContent=N[fromCur]||fromCur;toName.textContent=N[toCur]||toCur;
-rates={};loading=true;loadRates();pushFav();saveState();showToast(fromCur+' ⇄ '+toCur)}
+fromName.textContent=nm(fromCur);toName.textContent=nm(toCur);
+rates={};loading=true;loadRates();saveState();showToast(fromCur+' ⇄ '+toCur)}
 swap.addEventListener('click',doSwap);
 
 amt.addEventListener('input',convert);
 id('clr').addEventListener('click',function(){amt.value='';convert()});
 id('copy').addEventListener('click',function(){
-var t=out.textContent;if(t==='—'){showToast('Belum ada hasil');return}
-var done=function(){showToast('Disalin: '+t+' '+toCur)};
+var t2=out.textContent;if(t2==='—'){showToast(T('noRes'));return}
+var done=function(){showToast(T('copyOk')+': '+t2+' '+toCur)};
 if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t+' '+toCur).then(done).catch(done)}
 else{var ta=document.createElement('textarea');ta.value=t+' '+toCur;document.body.appendChild(ta);ta.select();
 try{document.execCommand('copy')}catch(e){}ta.remove();done()}});
@@ -216,5 +243,5 @@ for(var j=0;j<rb.length;j++){rb[j].classList.remove('on');rb[j].setAttribute('ar
 this.classList.add('on');this.setAttribute('aria-pressed','true');loadHist()});
 window.addEventListener('resize',function(){clearTimeout(timer);timer=setTimeout(draw,150)});
 
-loadState();renderFavs();loadRates();
+loadState();loadLang();applyLang();bindLang();loadRates();
 })();

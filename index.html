@@ -159,8 +159,16 @@ border-bottom:1px solid var(--stroke2);font-weight:700;position:sticky;top:0;bac
 .tg{display:inline-block;padding:1px 6px;border-radius:6px;font-size:9px;font-weight:800;letter-spacing:.5px;margin-left:3px;vertical-align:1px}
 .tg.crypto{color:#047857;background:rgba(5,150,105,.14);border:1px solid rgba(5,150,105,.35)}
 .tg.metal{color:#92600a;background:rgba(201,151,27,.14);border:1px solid rgba(201,151,27,.4)}
-.flag{display:inline-block;width:20px;height:14px;border-radius:3px;margin-right:8px;vertical-align:-2px;overflow:hidden;
+.flag{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;margin-right:8px;vertical-align:-5px;flex:none;
+border-radius:50%;overflow:visible}
+.flag .ic{width:20px;height:20px;border-radius:4px;object-fit:cover;display:block;
 box-shadow:0 0 0 1px rgba(4,120,87,.25)}
+.flag .metal-ic{font-size:16px;line-height:1}
+.ic-fallback{font-size:10px;font-weight:800;color:var(--muted)}
+.langbtn{padding:9px 14px;border-radius:999px;font-size:12px;font-weight:700;cursor:pointer;color:#047857;
+background:rgba(255,255,255,.75);border:1px solid var(--stroke);box-shadow:0 2px 8px rgba(4,120,87,.10);
+transition:.18s;flex:none}
+.langbtn:hover{background:rgba(5,150,105,.12);border-color:rgba(5,150,105,.45);color:#065f46}
 .scroll{max-height:320px;overflow-y:auto;border-radius:14px;position:relative;z-index:1}
 .scroll::-webkit-scrollbar{width:8px}
 .scroll::-webkit-scrollbar-thumb{background:rgba(5,150,105,.22);border-radius:99px}
@@ -195,15 +203,16 @@ backdrop-filter:blur(14px);transition:transform .3s cubic-bezier(.4,1.5,.5,1),op
     <div class="status" role="status" aria-live="polite">
       <span class="dot" id="dot"></span><span id="statusText">Memuat kurs live…</span>
     </div>
+    <button class="langbtn" id="langBtn" type="button" aria-label="Switch language">English</button>
   </header>
   <div class="hero">
-    <h2>Konversi Mata Uang, <em>Crypto & Emas</em> Real-Time</h2>
-    <p>160+ mata uang dunia, 10 crypto, emas & perak — kurs live, grafik historis, auto-refresh 60 detik.</p>
+    <h2><span id="heroT">Konversi Mata Uang,</span> <em id="heroE">Crypto & Emas</em> Real-Time</h2>
+    <p id="heroP">160+ mata uang dunia, 10 crypto, emas & perak — kurs live, grafik historis, auto-refresh 60 detik.</p>
   </div>
   <div class="grid">
     <section class="glass card card-pad" aria-label="Konverter">
-      <h3>Konverter</h3>
-      <div class="sub">Input jumlah, pilih pasangan mata uang</div>
+      <h3 id="cardTitle">Konverter</h3>
+      <div class="sub" id="cardSub">Input jumlah, pilih pasangan mata uang</div>
       <div class="amount">
         <span class="cur" id="amtCur">USD</span>
         <input type="number" id="amount" value="1" min="0" step="any" inputmode="decimal" placeholder="0"
@@ -232,17 +241,16 @@ backdrop-filter:blur(14px);transition:transform .3s cubic-bezier(.4,1.5,.5,1),op
         </div>
       </div>
       <div class="result">
-        <div class="lbl"><span>Hasil Konversi</span><button class="copybtn" id="copy" aria-label="Salin hasil konversi">⧉ Salin</button></div>
+        <div class="lbl"><span id="resLbl">Hasil Konversi</span><button class="copybtn" id="copy" aria-label="Salin hasil konversi">⧉ Salin</button></div>
         <div class="val" id="out" aria-live="polite">—</div>
         <div class="rate" id="rateLine">—</div>
       </div>
-      <div class="fav" id="fav"><span class="fvlbl">Pasangan favorit</span></div>
       <div class="quick" id="quick" aria-label="Nilai cepat"></div>
       <div class="err" id="err" role="alert"></div>
     </section>
     <section class="glass card card-pad" aria-label="Grafik pergerakan kurs">
       <div class="chart-head">
-        <div><h3 id="chartTitle">USD → IDR</h3><div class="sub">Pergerakan kurs historis</div></div>
+        <div><h3 id="chartTitle">USD → IDR</h3><div class="sub" id="chartSub">Pergerakan kurs historis</div></div>
         <div style="text-align:right">
           <div class="chart-price" id="chartPrice">—</div>
           <div class="chart-change up" id="chartChange">—</div>
@@ -258,11 +266,11 @@ backdrop-filter:blur(14px);transition:transform .3s cubic-bezier(.4,1.5,.5,1),op
     </section>
   </div>
   <section class="glass card card-pad" style="margin-top:22px" aria-label="Tabel kurs populer">
-    <h3>Kurs Populer</h3>
-    <div class="sub">Kurs tengah real-time · 1 <b id="tblBase">USD</b> =</div>
+    <h3 id="tblTitle">Kurs Populer</h3>
+    <div class="sub" id="tblSub">Kurs tengah real-time · 1 <b id="tblBase">USD</b> =</div>
     <div class="scroll">
       <table class="tbl">
-        <thead><tr><th scope="col">Mata Uang</th><th scope="col" style="text-align:right">Kurs</th><th scope="col" style="text-align:right">Perubahan 24H</th></tr></thead>
+        <thead><tr><th scope="col" id="thC">Mata Uang</th><th scope="col" style="text-align:right" id="thR">Kurs</th><th scope="col" style="text-align:right" id="th24">Perubahan 24H</th></tr></thead>
         <tbody id="tbody"><tr><td colspan="3"><div class="sk" style="height:14px;margin:6px 0"></div></td></tr></tbody>
       </table>
     </div>
@@ -273,6 +281,7 @@ backdrop-filter:blur(14px);transition:transform .3s cubic-bezier(.4,1.5,.5,1),op
   </footer>
 </div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script src="icons.js"></script>
 <script src="app.js"></script>
 </body>
 </html>
