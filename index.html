@@ -283,6 +283,26 @@ box-shadow:0 0 0 1px rgba(4,120,87,.25)}
 background:rgba(255,255,255,.75);border:1px solid var(--stroke);box-shadow:0 2px 8px rgba(4,120,87,.10);
 transition:.18s;flex:none}
 .langbtn:hover{background:rgba(5,150,105,.12);border-color:rgba(5,150,105,.45);color:#065f46}
+/* === TradingView === */
+.tv-tape{position:sticky;top:0;z-index:60;background:rgba(8,30,22,.96);border-bottom:1px solid rgba(5,150,105,.35);
+backdrop-filter:blur(14px);margin:0 -20px 0;padding:0}
+.tv-tape iframe{display:block;width:100%!important;height:46px!important;border:0}
+.tv-card{overflow:visible}
+.tv-tabs{display:flex;gap:6px;flex-wrap:wrap}
+.tv-tab{padding:7px 14px;border-radius:999px;font-size:12px;font-weight:700;cursor:pointer;
+color:var(--muted);background:rgba(255,255,255,.7);border:1px solid var(--stroke2);transition:.18s}
+.tv-tab:hover{color:var(--acc);border-color:rgba(5,150,105,.45)}
+.tv-tab.on{color:#fff;background:linear-gradient(135deg,#059669,#c9971b);border-color:transparent;
+box-shadow:0 4px 14px rgba(5,150,105,.32)}
+.tv-pane{margin-top:14px;min-height:420px;border-radius:16px;overflow:hidden;position:relative;z-index:1;
+background:rgba(247,253,250,.9);border:1px solid var(--stroke2)}
+.tv-pane iframe{display:block;width:100%!important;height:100%!important;min-height:420px;border:0}
+#tvTA,#tvInfo{min-height:340px}
+#tvTA iframe,#tvInfo iframe{min-height:340px}
+.tv-cal{margin-top:14px;border-radius:16px;overflow:hidden;position:relative;z-index:1;
+border:1px solid var(--stroke2);background:rgba(247,253,250,.9)}
+.tv-cal iframe{display:block;width:100%!important;height:420px;border:0}
+@media(max-width:520px){.tv-pane,.tv-pane iframe{min-height:340px}.tv-cal iframe{height:340px}}
 .lang-en .lang-id{display:none}
 .lang-id .lang-en{display:none}
 .lang-block{animation:none}
@@ -327,6 +347,7 @@ background:linear-gradient(135deg,rgba(5,150,105,.16),rgba(201,151,27,.16));bord
 </head>
 <body>
 <div class="accent-bar"></div>
+<div class="tv-tape" id="tvTape"></div>
 <div class="bg"></div>
 <div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div>
 <div class="grain"></div>
@@ -405,6 +426,19 @@ background:linear-gradient(135deg,rgba(5,150,105,.16),rgba(201,151,27,.16));bord
         <button data-d="30" class="on" aria-pressed="true">30H</button>
         <button data-d="90">90H</button>
       </div>
+    </section>
+    <section class="glass card card-pad tv-card" aria-label="Analisa TradingView">
+      <div class="chart-head">
+        <div><h3 id="tvTitle">Analisa Pasar</h3><div class="sub" id="tvSub">Grafik & indikator TradingView</div></div>
+        <div class="tv-tabs" role="tablist" aria-label="Mode analisa">
+          <button class="tv-tab on" data-t="chart" role="tab" aria-selected="true">Chart</button>
+          <button class="tv-tab" data-t="ta" role="tab" aria-selected="false">Indikator</button>
+          <button class="tv-tab" data-t="info" role="tab" aria-selected="false">Info</button>
+        </div>
+      </div>
+      <div class="tv-pane" id="tvChart" role="tabpanel" aria-label="Grafik TradingView"></div>
+      <div class="tv-pane" id="tvTA" role="tabpanel" aria-label="Indikator TradingView" hidden></div>
+      <div class="tv-pane" id="tvInfo" role="tabpanel" aria-label="Info symbol TradingView" hidden></div>
     </section>
   </div>
   <section class="glass card card-pad" style="margin-top:22px" aria-label="Informasi kurs populer">
@@ -503,6 +537,11 @@ background:linear-gradient(135deg,rgba(5,150,105,.16),rgba(201,151,27,.16));bord
     monitoring FX rates, crypto investors calculating portfolio value in Rupiah, and anyone who needs
     the latest exchange rates fast and free.</p>
     </div>
+  </section>
+  <section class="glass card card-pad" style="margin-top:22px" aria-label="Kalender ekonomi">
+    <h3 id="calTitle">Kalender Ekonomi</h3>
+    <div class="sub" id="calSub">Rilis berita &amp; data ekonomi yang menggerakkan pasar</div>
+    <div class="tv-cal" id="tvCal"></div>
   </section>
   <footer>
     MoneyMax · Data: open.er-api.com · frankfurter.dev · coingecko · gold-api · currency-api<br>

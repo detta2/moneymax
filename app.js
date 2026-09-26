@@ -73,6 +73,7 @@ function applyLang(){
  id('thC').textContent=T('tblC');id('thR').textContent=T('tblR');id('th24').textContent=T('tblC24');
  id('rangeLbl').textContent=T('rangeLbl');
  id('range').setAttribute('aria-label',T('rangeA'));
+ if(tvReady)tvRender();
  var tr={trust1:'t1',trust1s:'t1s',trust2:'t2',trust2s:'t2s',trust3:'t3',trust3s:'t3s',trust4:'t4',trust4s:'t4s'};
  var els=document.querySelectorAll('[data-i]'),i;
  for(i=0;i<els.length;i++){var k=els[i].getAttribute('data-i');
@@ -124,8 +125,8 @@ function renderItems(box,input,cur){
   var rows=box.querySelectorAll('.ccy-item'),i;
   for(i=0;i<rows.length;i++)rows[i].addEventListener('click',function(){
     var c=this.dataset.c;
-    if(input===fromSearch){fromCur=c;fromCode.textContent=c;fromName.textContent=nm(c);rates={};loading=true;loadRates()}
-    else{toCur=c;toCode.textContent=c;toName.textContent=nm(c);convert();loadHist()}
+    if(input===fromSearch){fromCur=c;fromCode.textContent=c;fromName.textContent=nm(c);rates={};loading=true;loadRates();if(tvReady)tvRender()}
+    else{toCur=c;toCode.textContent=c;toName.textContent=nm(c);convert();loadHist();if(tvReady)tvRender()}
     closeAll();saveState();
   });
 }
@@ -244,13 +245,72 @@ stext.textContent=T('live')+' '+new Date().toLocaleTimeString(LANG==='en'?'en-US
 .catch(function(e){loading=false;busy=false;showErr(T('fail')+e.message+T('retry'))})
 .finally(function(){dot.classList.remove('sync')})}
 function tick(){refreshIn--;if(refreshIn<=0){loadRates();return}
-if(!busy)stext.textContent=T('refresh')+' '+refreshIn+'s';}
+if(!busy)stext.textContent=T('refresh')+' '+refreshIn+'s';
+if(!tvReady&&typeof TradingView!=='undefined'){tvReady=true;tvInit()}}
 setInterval(tick,1000);
+
+/* ---------- TradingView ---------- */
+var CRYPTO_TV={BTC:'BINANCE:BTC',ETH:'BINANCE:ETH',SOL:'BINANCE:SOL',BNB:'BINANCE:BNB',XRP:'RIPPLE',DOGE:'BINANCE:DOGE',USDT:'BINANCE:USDT',TRX:'TRON',ADA:'CARDANO',LINK:'CHAINLINK'};
+function tvSymbol(a,b){
+  if(CRYPTO_TV[a])return CRYPTO_TV[a]+b;
+  if(CRYPTO_TV[b])return CRYPTO_TV[b]+a;
+  if(a==='XAU'||b==='XAU')return 'OANDA:XAUUSD';
+  if(a==='XAG'||b==='XAG')return 'OANDA:XAGUSD';
+  return 'FX:'+a+b;
+}
+var tvCur='',tvReady=false;
+function tvLoad(kind,sym,host,extra){
+  var c=document.createElement('div');c.className='tradingview-widget-container__widget';
+  var s=document.createElement('script');s.async=true;s.type='text/javascript';
+  s.src='https://s3.tradingview.com/external-embedding/embed-widget-'+kind+'.js';
+  s.innerHTML=JSON.stringify(Object.assign({symbol:sym,colorTheme:'light',isTransparent:true,locale:LANG==='en'?'en':'id_ID'},extra||{}));
+  host.innerHTML='';host.appendChild(c);host.appendChild(s);
+}
+function tvRender(){
+  if(!tvReady)return;
+  var sym=tvSymbol(fromCur,toCur);
+  if(sym===tvCur)return;tvCur=sym;
+  id('tvTitle').textContent=nm(fromCur)+' / '+nm(toCur);
+  id('tvSub').textContent=LANG==='en'?'TradingView chart & indicators':'Grafik & indikator TradingView';
+  tvLoad('advanced-chart',sym,id('tvChart'),{autosize:true,timezone:'Asia/Jakarta',interval:'D',style:'1'});
+  tvLoad('technical-analysis',sym,id('tvTA'),{width:'100%',height:'340'});
+  tvLoad('symbol-info',sym,id('tvInfo'),{width:'100%',height:'340'});
+}
+function tvTabs(){
+  var tb=id('tvChart').parentElement.querySelectorAll('.tv-tab'),i;
+  for(i=0;i<tb.length;i++)tb[i].addEventListener('click',function(){
+    for(var j=0;j<tb.length;j++){tb[j].classList.remove('on');tb[j].setAttribute('aria-selected','false')}
+    this.classList.add('on');this.setAttribute('aria-selected','true');
+    var p=this.dataset.t;
+    id('tvChart').hidden=(p!=='chart');id('tvTA').hidden=(p!=='ta');id('tvInfo').hidden=(p!=='info');
+  });
+}
+function tvInit(){
+  var tape=[
+    {symbol:'OANDA:XAUUSD',proName:'OANDA:XAUUSD',title:'Gold'},
+    {symbol:'FX:USDIDR',proName:'FX:USDIDR',title:'USD/IDR'},
+    {symbol:'FX:EURUSD',proName:'FX:EURUSD',title:'EUR/USD'},
+    {symbol:'FX:USDJPY',proName:'FX:USDJPY',title:'USD/JPY'},
+    {symbol:'FX:GBPUSD',proName:'FX:GBPUSD',title:'GBP/USD'},
+    {symbol:'BINANCE:BTCUSD',proName:'BINANCE:BTCUSD',title:'BTC/USD'},
+    {symbol:'BINANCE:ETHUSD',proName:'BINANCE:ETHUSD',title:'ETH/USD'},
+    {symbol:'OANDA:XAGUSD',proName:'OANDA:XAGUSD',title:'Silver'}
+  ];
+  var s=document.createElement('script');s.async=true;
+  s.src='https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js';
+  s.innerHTML=JSON.stringify({symbols:tape,showSymbolLogo:true,isTransparent:false,displayMode:'adaptive',colorTheme:'dark',locale:LANG==='en'?'en':'id_ID'});
+  id('tvTape').appendChild(s);
+  var cal=document.createElement('script');cal.async=true;
+  cal.src='https://s3.tradingview.com/external-embedding/embed-widget-events.js';
+  cal.innerHTML=JSON.stringify({colorTheme:'light',isTransparent:true,width:'100%',height:'420',locale:LANG==='en'?'en':'id_ID'});
+  id('tvCal').appendChild(cal);
+  tvTabs();tvRender();
+}
 
 function doSwap(){var t=fromCur;fromCur=toCur;toCur=t;
 fromCode.textContent=fromCur;toCode.textContent=toCur;
 fromName.textContent=nm(fromCur);toName.textContent=nm(toCur);
-rates={};loading=true;loadRates();saveState();showToast(fromCur+' ⇄ '+toCur)}
+rates={};loading=true;loadRates();saveState();showToast(fromCur+' ⇄ '+toCur);if(tvReady)tvRender()}
 swap.addEventListener('click',doSwap);
 
 amt.addEventListener('input',convert);
@@ -268,5 +328,7 @@ for(var j=0;j<rb.length;j++){rb[j].classList.remove('on');rb[j].setAttribute('ar
 this.classList.add('on');this.setAttribute('aria-pressed','true');loadHist()});
 window.addEventListener('resize',function(){clearTimeout(timer);timer=setTimeout(draw,150)});
 
-loadState();loadLang();applyLang();bindLang();loadRates();
+function tvBooted(){if(!tvReady&&typeof TradingView!=='undefined'){tvReady=true;tvInit();return true}return false}
+tvBooted();
+loadState();loadLang();applyLang();bindLang();loadRates();tvBooted();
 })();
