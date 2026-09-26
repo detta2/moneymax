@@ -23,6 +23,8 @@ var STR={
   crypto:'Crypto',metal:'Logam',rangeLbl:'Rentang waktu',rangeA:'Rentang waktu grafik',
   tblFi:'Mata Uang',tblCr:'Crypto & Logam',tbl24:'Perubahan 24H',thA:'Aset',
   seoTentang:'Tentang Konverter Mata Uang MoneyMax',
+  bcNilaiPabean:'Nilai Pabean (CIF)',bcBea:'Bea Masuk',bcPpn:'PPN 11%',bcPph:'PPh 22 Impor',
+  bcTotal:'Total Pajak',bcLanded:'Total Biaya Lengkap (barang + pajak)',
   t1:'100% Gratis',t1s:'Tanpa akun, tanpa biaya, tanpa batas konversi',
   t2:'Real-Time',t2s:'Kurs diperbarui otomatis setiap 60 detik',
   t3:'Privasi Aman',t3s:'Tanpa cookie pelacak, tanpa penyimpanan data',
@@ -43,6 +45,8 @@ var STR={
   crypto:'Crypto',metal:'Metal',rangeLbl:'Time range',rangeA:'Chart time range',
   tblFi:'Fiat Currencies',tblCr:'Crypto & Metals',tbl24:'24H Change',thA:'Asset',
   seoTentang:'About the MoneyMax Currency Converter',
+  bcNilaiPabean:'Customs Value (CIF)',bcBea:'Import Duty',bcPpn:'VAT',bcPph:'Income Tax Art.22',
+  bcTotal:'Total Tax',bcLanded:'Landed Cost (goods + tax)',
   t1:'100% Free',t1s:'No account, no fees, unlimited conversions',
   t2:'Real-Time',t2s:'Rates auto-update every 60 seconds',
   t3:'Privacy Safe',t3s:'No tracking cookies, no data stored',
@@ -249,7 +253,8 @@ function loadRates(){busy=true;stext.textContent=T('loading');dot.classList.add(
 fetch('/api/rates?base='+fromCur).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json()})
 .then(function(d){rates=d.rates||{};prev=d.prev||{};loading=false;
 convert();renderTable();loadHist();refreshIn=60;
-stext.textContent=T('live')+' '+new Date().toLocaleTimeString(LANG==='en'?'en-US':'id-ID',{hour:'2-digit',minute:'2-digit',second:'2-digit'})})
+stext.textContent=T('live')+' '+new Date().toLocaleTimeString(LANG==='en'?'en-US':'id-ID',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+if(typeof bcCalc==='function')bcCalc()})
 .catch(function(e){loading=false;busy=false;showErr(T('fail')+e.message+T('retry'))})
 .finally(function(){dot.classList.remove('sync')})}
 function tick(){refreshIn--;if(refreshIn<=0){loadRates();return}
@@ -339,4 +344,42 @@ if(st)st.addEventListener('click',function(){
   var b=id('seoBody'),open=this.getAttribute('aria-expanded')==='true';
   b.hidden=open;this.setAttribute('aria-expanded',String(!open));
 });
+
+/* ---------- Kalkulator Bea Masuk ---------- */
+var bcSel=id('bcCcy'),bcRates={};
+function bcCalc(){
+  var v=+id('bcVal').value||0,sh=+id('bcShip').value||0,ins=+id('bcIns').value||0;
+  var ccy=bcSel.value||'USD',ppn=+id('bcPpn').value/100,pph=+id('bcPph').value/100;
+  var rate=bcRates[ccy]||1;
+  var cif=v+sh+ins;
+  var fob=v;
+  var bm=0;
+  if(fob>3&&fob<=1500)bm=fob*0.075;
+  else if(fob>1500)bm=(fob-1500)*0.075;
+  var np=cif*rate;
+  var bmR=bm*rate,ppnR=(np+bmR)*ppn,pphR=(np+bmR)*pph;
+  var tot=bmR+ppnR+pphR;
+  var g=function(x){return fmt(x,0)};
+  id('bcOut').innerHTML=
+  '<div class="bc-box"><span id="bcNp">'+T('bcNilaiPabean')+'</span><b>Rp '+g(np)+'</b></div>'+
+  '<div class="bc-box"><span id="bcBmL">'+T('bcBea')+'</span><b>Rp '+g(bmR)+'</b></div>'+
+  '<div class="bc-box"><span id="bcPpnL">'+T('bcPpn')+'</span><b>Rp '+g(ppnR)+'</b></div>'+
+  '<div class="bc-box tot"><span id="bcTotL">'+T('bcTotal')+'</span><b>Rp '+g(tot)+'</b></div>';
+  if(pph>0)id('bcOut').insertAdjacentHTML('beforeend',
+  '<div class="bc-box"><span id="bcPphL">'+T('bcPph')+'</span><b>Rp '+g(pphR)+'</b></div>');
+  var lbl=T('bcLanded');
+  id('bcOut').insertAdjacentHTML('beforeend',
+  '<div class="bc-box tot" style="grid-column:1/-1"><span>'+lbl+'</span><b>Rp '+g(np+tot)+' · ~$'+cif.toFixed(2)+' ('+ccy+')</b></div>');
+}
+function bcInit(){
+  if(!bcSel)return;
+  var opt=['USD','EUR','GBP','JPY','SGD','AUD','CNY','KRW','HKD','MYR','THB','INR','SAR','AED','CHF','CAD','NZD','SEK'];
+  bcSel.innerHTML=opt.map(function(c){return '<option value="'+c+'"'+(c==='USD'?' selected':'')+'>'+c+' · '+esc(nm(c))+'</option>'}).join('');
+  ['bcVal','bcShip','bcIns','bcCcy','bcPpn','bcPph'].forEach(function(k){
+    id(k).addEventListener('input',bcCalc);id(k).addEventListener('change',bcCalc)});
+  fetch('/api/rates?base=IDR').then(function(r){return r.json()}).then(function(d){
+    bcRates=d.rates||{};bcCalc()}).catch(function(){});
+  bcCalc();
+}
+bcInit();
 })();

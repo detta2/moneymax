@@ -301,6 +301,27 @@ background:rgba(247,253,250,.9);border:1px solid var(--stroke2)}
 #tvTA iframe,#tvInfo iframe{min-height:400px}
 @media(max-width:520px){.tv-pane,.tv-pane iframe{min-height:420px}}
 .tv-cal{display:none}
+/* === kalkulator bea masuk === */
+.bc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px}
+.bc-f{display:flex;flex-direction:column;gap:6px;font-size:12px;font-weight:700;color:#065f46}
+.bc-row{display:flex;align-items:center;gap:0;border-radius:11px;overflow:hidden;
+border:1px solid var(--stroke2);background:rgba(255,255,255,.85)}
+.bc-row input,.bc-f select{flex:1;border:0;padding:10px 11px;font-size:14px;font-weight:600;outline:none;
+background:transparent;color:#173d31;font-variant-numeric:tabular-nums;min-width:0}
+.bc-row input:focus,.bc-f select:focus{box-shadow:inset 0 0 0 2px rgba(5,150,105,.5)}
+.bc-f select{border-radius:11px;border:1px solid var(--stroke2);background:rgba(255,255,255,.85);cursor:pointer}
+.bc-cur{padding:0 11px;font-size:11px;font-weight:800;color:var(--acc);background:rgba(5,150,105,.1);align-self:stretch;
+display:flex;align-items:center;border-left:1px solid var(--stroke2)}
+.bc-note{margin-top:12px;font-size:11.5px;line-height:1.6;color:var(--muted);background:rgba(201,151,27,.09);
+border:1px solid rgba(201,151,27,.25);border-radius:11px;padding:9px 12px}
+.bc-res{margin-top:14px;display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.bc-box{background:rgba(247,253,250,.95);border:1px solid var(--stroke2);border-radius:13px;padding:11px 13px}
+.bc-box b{display:block;font-size:16px;font-variant-numeric:tabular-nums;color:#173d31;letter-spacing:-.3px}
+.bc-box span{font-size:10.5px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--muted)}
+.bc-box.tot{background:linear-gradient(135deg,rgba(5,150,105,.14),rgba(201,151,27,.14));border-color:rgba(5,150,105,.4)}
+.bc-box.tot b{font-size:20px;color:#065f46}
+@media(max-width:700px){.bc-grid{grid-template-columns:1fr 1fr}.bc-res{grid-template-columns:1fr 1fr}}
+@media(max-width:440px){.bc-grid{grid-template-columns:1fr}}
 .lang-en .lang-id{display:none}
 .lang-id .lang-en{display:none}
 .lang-block{animation:none}
@@ -449,6 +470,32 @@ background:linear-gradient(135deg,rgba(5,150,105,.16),rgba(201,151,27,.16));bord
       <div class="tv-pane" id="tvChart" role="tabpanel" aria-label="Grafik TradingView"></div>
       <div class="tv-pane" id="tvTA" role="tabpanel" aria-label="Indikator TradingView" hidden></div>
       <div class="tv-pane" id="tvInfo" role="tabpanel" aria-label="Info symbol TradingView" hidden></div>
+    </section>
+    <section class="glass card card-pad" style="margin-top:22px" aria-label="Kalkulator bea masuk dan pajak impor">
+      <h3 id="bcTitle">Kalkulator Bea Masuk &amp; Pajak Impor</h3>
+      <div class="sub" id="bcSub">Belanja dari luar negeri? Hitung total pajaknya secara real-time</div>
+      <div class="bc-grid">
+        <label class="bc-f"><span id="bcValLbl">Nilai barang (FOB)</span>
+          <div class="bc-row"><input type="number" id="bcVal" value="100" min="0" step="0.01" aria-describedby="bcHint"><span class="bc-cur" id="bcCur">USD</span></div>
+        </label>
+        <label class="bc-f"><span id="bcShipLbl">Ongkos kirim</span>
+          <div class="bc-row"><input type="number" id="bcShip" value="25" min="0" step="0.01"><span class="bc-cur" id="bcCur2">USD</span></div>
+        </label>
+        <label class="bc-f"><span id="bcInsLbl">Asuransi</span>
+          <div class="bc-row"><input type="number" id="bcIns" value="5" min="0" step="0.01"><span class="bc-cur" id="bcCur3">USD</span></div>
+        </label>
+        <label class="bc-f"><span id="bcRateLbl">Kurs mata uang asal</span>
+          <select id="bcCcy"></select>
+        </label>
+        <label class="bc-f"><span id="bcPpnLbl">Tarif PPN</span>
+          <select id="bcPpn"><option value="11">11% (berlaku)</option><option value="12">12%</option></select>
+        </label>
+        <label class="bc-f"><span id="bcPphLbl">Status PPh Pasal 22</span>
+          <select id="bcPph"><option value="0">Dikecualikan (kiriman ≤$1.500)</option><option value="2.5">2,5% (punya API)</option><option value="7.5">7,5% (tidak punya API)</option></select>
+        </label>
+      </div>
+      <div class="bc-note" id="bcHint">Dasar: PMK 4/2025 — FOB ≤ $3 bebas bea masuk; $3–$1.500 kena bea masuk 7,5%; &gt;$1.500 bea masuk hanya atas kelebihan nilai. PPN berlaku atas seluruh nilai pabean.</div>
+      <div class="bc-res" id="bcOut" role="status" aria-live="polite"></div>
     </section>
   </div>
   <section class="glass card card-pad" style="margin-top:22px" aria-label="Informasi kurs populer">
