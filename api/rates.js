@@ -18,6 +18,22 @@ export default async function handler(req, res) {
     },
   ];
 
+  // collect previous-day rates so the UI can show 24H change
+  let prev = null;
+  try {
+    const d = new Date();
+    d.setDate(d.getDate() - 1);
+    const iso = d.toISOString().slice(0, 10);
+    const pr = await fetch(
+      `https://api.frankfurter.dev/v1/${iso}?from=${base}`,
+      { headers: { 'User-Agent': 'MoneyMax/1.0' } }
+    );
+    if (pr.ok) {
+      const pd = await pr.json();
+      if (pd && pd.rates) prev = pd.rates;
+    }
+  } catch (e) {}
+
   for (const s of sources) {
     try {
       const r = await fetch(s.url, { headers: { 'User-Agent': 'MoneyMax/1.0' } });
@@ -28,6 +44,7 @@ export default async function handler(req, res) {
         return res.status(200).json({
           base,
           rates,
+          prev,
           source: s.url.split('/')[2],
           updated: new Date().toISOString(),
         });
