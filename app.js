@@ -9,9 +9,10 @@ fromItems=id('fromItems'),toItems=id('toItems'),fromSearch=id('fromSearch'),toSe
 fromCode=id('fromCode'),toCode=id('toCode'),fromName=id('fromName'),toName=id('toName'),
 toast=id('toast'),favBox=id('fav');
 
-var F={'USD':'🇺🇸','EUR':'🇪🇺','IDR':'🇮🇩','JPY':'🇯🇵','GBP':'🇬🇧','AUD':'🇦🇺','CAD':'🇨🇦','CHF':'🇨🇭','CNY':'🇨🇳','SGD':'🇸🇬','MYR':'🇲🇾','THB':'🇹🇭','KRW':'🇰🇷','HKD':'🇭🇰','INR':'🇮🇳','AED':'🇦🇪','SAR':'🇸🇦','NZD':'🇳🇿','SEK':'🇸🇪','NOK':'🇳🇴','DKK':'🇩🇰','RUB':'🇷🇺','CZK':'🇨🇿','PLN':'🇵🇱','TRY':'🇹🇷','BRL':'🇧🇷','MXN':'🇲🇽','ZAR':'🇿🇦','PHP':'🇵🇭','VND':'🇻🇳','PKR':'🇵🇰','BDT':'🇧🇩','NGN':'🇳🇬','EGP':'🇪🇬','KES':'🇰🇪','MAD':'🇲🇦','HUF':'🇭🇺','RON':'🇷🇴','BGN':'🇧🇬','HRK':'🇭🇷','ISK':'🇮🇸','ILS':'🇮🇱','JOD':'🇯🇴','KWD':'🇰🇼','QAR':'🇶🇦','OMR':'🇴🇲','BHD':'🇧🇭','LKR':'🇱🇰','NPR':'🇳🇵','MMK':'🇲🇲','KHR':'🇰🇭','LAK':'🇱🇦','TWD':'🇹🇼'};
-var N={'USD':'Dolar AS','EUR':'Euro','IDR':'Rupiah','JPY':'Yen Jepang','GBP':'Pound Inggris','AUD':'Dolar Australia','CAD':'Dolar Kanada','CHF':'Franc Swiss','CNY':'Yuan Cina','SGD':'Dolar Singapura','MYR':'Ringgit','THB':'Baht','KRW':'Won Korsel','HKD':'Dolar Hong Kong','INR':'Rupee India','AED':'Dirham','SAR':'Riyal','NZD':'Dolar Selandia','SEK':'Krona Swedia','NOK':'Krone Norwegia','DKK':'Krone Denmark','RUB':'Rubel Rusia','CZK':'Koruna','PLN':'Zloty','TRY':'Lira Turki','BRL':'Real Brazil','MXN':'Peso Meksiko','ZAR':'Rand Afrika','PHP':'Peso Filipina','VND':'Dong Vietnam','PKR':'Rupee Pakistan','BDT':'Taka','NGN':'Naira','EGP':'Pound Mesir','KES':'Shilling Kenya','MAD':'Dirham Maroko','HUF':'Forint','RON':'Leu Rumania','BGN':'Lev Bulgaria','HRK':'Kuna','ISK':'Krona Islandia','ILS':'Shekel','JOD':'Dinar Yordania','KWD':'Dinar Kuwait','QAR':'Riyal Qatar','OMR':'Rial Oman','BHD':'Dinar Bahrain','LKR':'Rupee Sri Lanka','NPR':'Rupee Nepal','MMK':'Kyat','KHR':'Riel','LAK':'Kip','TWD':'Dolar Taiwan'};
-var P=['USD','EUR','IDR','JPY','GBP','AUD','CAD','CHF','CNY','SGD','MYR','THB','KRW','HKD','INR','AED','SAR','NZD','SEK','NOK','DKK','RUB','CZK','PLN','TRY','BRL','MXN','ZAR','PHP','VND','PKR','BDT','NGN','EGP','KES','MAD','HUF','RON','BGN','HRK','ISK','ILS','JOD','KWD','QAR','OMR','BHD','LKR','NPR','MMK','KHR','LAK','TWD'];
+var F={'USD':'🇺🇸','EUR':'🇪🇺','IDR':'🇮🇩','JPY':'🇯🇵','GBP':'🇬🇧','AUD':'🇦🇺','CAD':'🇨🇦','CHF':'🇨🇭','CNY':'🇨🇳','SGD':'🇸🇬','MYR':'🇲🇾','THB':'🇹🇭','KRW':'🇰🇷','HKD':'🇭🇰','INR':'🇮🇳','AED':'🇦🇪','SAR':'🇸🇦','NZD':'🇳🇿','SEK':'🇸🇪','NOK':'🇳🇴','DKK':'🇩🇰','RUB':'🇷🇺','CZK':'🇨🇿','PLN':'🇵🇱','TRY':'🇹🇷','BRL':'🇧🇷','MXN':'🇲🇽','ZAR':'🇿🇦','PHP':'🇵🇭','VND':'🇻🇳','PKR':'🇵🇰','BDT':'🇧🇩','NGN':'🇳🇬','EGP':'🇪🇬','KES':'🇰🇪','MAD':'🇲🇦','HUF':'🇭🇺','RON':'🇷🇴','BGN':'🇧🇬','HRK':'🇭🇷','ISK':'🇮🇸','ILS':'🇮🇱','JOD':'🇯🇴','KWD':'🇰🇼','QAR':'🇶🇦','OMR':'🇴🇲','BHD':'🇧🇭','LKR':'🇱🇰','NPR':'🇳🇵','MMK':'🇲🇲','KHR':'🇰🇭','LAK':'🇱🇦','TWD':'🇹🇼','BTC':'₿','ETH':'Ξ','SOL':'◎','BNB':'⬡','XRP':'✕','DOGE':'Ð','USDT':'₮','TRX':'◈','ADA':'₳','LINK':'⬢','XAU':'🥇','XAG':'🥈'};
+var N={'USD':'Dolar AS','EUR':'Euro','IDR':'Rupiah','JPY':'Yen Jepang','GBP':'Pound Inggris','AUD':'Dolar Australia','CAD':'Dolar Kanada','CHF':'Franc Swiss','CNY':'Yuan Cina','SGD':'Dolar Singapura','MYR':'Ringgit','THB':'Baht','KRW':'Won Korsel','HKD':'Dolar Hong Kong','INR':'Rupee India','AED':'Dirham','SAR':'Riyal','NZD':'Dolar Selandia','SEK':'Krona Swedia','NOK':'Krone Norwegia','DKK':'Krone Denmark','RUB':'Rubel Rusia','CZK':'Koruna','PLN':'Zloty','TRY':'Lira Turki','BRL':'Real Brazil','MXN':'Peso Meksiko','ZAR':'Rand Afrika','PHP':'Peso Filipina','VND':'Dong Vietnam','PKR':'Rupee Pakistan','BDT':'Taka','NGN':'Naira','EGP':'Pound Mesir','KES':'Shilling Kenya','MAD':'Dirham Maroko','HUF':'Forint','RON':'Leu Rumania','BGN':'Lev Bulgaria','HRK':'Kuna','ISK':'Krona Islandia','ILS':'Shekel','JOD':'Dinar Yordania','KWD':'Dinar Kuwait','QAR':'Riyal Qatar','OMR':'Rial Oman','BHD':'Dinar Bahrain','LKR':'Rupee Sri Lanka','NPR':'Rupee Nepal','MMK':'Kyat','KHR':'Riel','LAK':'Kip','TWD':'Dolar Taiwan','BTC':'Bitcoin','ETH':'Ethereum','SOL':'Solana','BNB':'BNB','XRP':'XRP','DOGE':'Dogecoin','USDT':'Tether USD','TRX':'TRON','ADA':'Cardano','LINK':'Chainlink','XAU':'Emas (per tr oz)','XAG':'Perak (per tr oz)'};
+var P=['USD','EUR','IDR','JPY','GBP','AUD','CAD','CHF','CNY','SGD','MYR','THB','KRW','HKD','INR','AED','SAR','NZD','SEK','NOK','DKK','RUB','CZK','PLN','TRY','BRL','MXN','ZAR','PHP','VND','PKR','BDT','NGN','EGP','KES','MAD','HUF','RON','BGN','HRK','ISK','ILS','JOD','KWD','QAR','OMR','BHD','LKR','NPR','MMK','KHR','LAK','TWD','BTC','ETH','SOL','BNB','XRP','DOGE','USDT','TRX','ADA','LINK','XAU','XAG'];
+var CRYPTO=['BTC','ETH','SOL','BNB','XRP','DOGE','USDT','TRX','ADA','LINK'],METAL=['XAU','XAG'];
 var rates={},days=30,hist=[],prev={},loading=true,fromCur='USD',toCur='IDR',hover=-1,errT=null,timer=null,toastT=null;
 
 function fmt(n,d){if(!isFinite(n))return'—';d=d||2;
@@ -101,11 +102,16 @@ rateLine.innerHTML='1 '+fromCur+' = <b style="color:var(--acc)">'+fmt(r,4)+'</b>
 (ch!==null?' <span class="chip '+(ch>=0?'up':'down')+'">'+(ch>=0?'▲':'▼')+' '+Math.abs(ch).toFixed(2)+'% 24H</span>':'');
 tblBase.textContent=fromCur;cTitle.textContent=fromCur+' → '+toCur}
 
+function isAsset(c){return CRYPTO.indexOf(c)>-1||METAL.indexOf(c)>-1}
 function renderTable(){var row=function(c){var r=rates[c];if(!r)return'';
 var p=prev[c],ch=p?(r-p)/p*100:null,ar=ch===null?'—':(ch>=0?'▲':'▼');
-return '<tr data-c="'+c+'"><td>'+flag(c)+'<span class="nm">'+c+'</span> <span class="cd">'+esc(N[c]||'')+'</span></td>'+
+var tag=isAsset(c)?(METAL.indexOf(c)>-1?' <span class="tg metal">Logam</span>':' <span class="tg crypto">Crypto</span>'):'';
+return '<tr data-c="'+c+'"><td>'+flag(c)+'<span class="nm">'+c+'</span> <span class="cd">'+esc(N[c]||'')+tag+'</span></td>'+
 '<td class="vl">'+fmt(r,4)+'</td><td class="vl" style="color:'+(ch===null?'var(--muted)':(ch>=0?'var(--up)':'var(--down)'))+'">'+ar+' '+(ch===null?'':Math.abs(ch).toFixed(2)+'%')+'</td></tr>'};
-tbody.innerHTML=P.filter(function(c){return rates[c]&&c!==fromCur}).map(row).join('')||
+var rows=P.filter(function(c){return rates[c]&&c!==fromCur});
+// crypto & metals first, then fiat
+rows.sort(function(a,b){var A=isAsset(a)?0:1,B=isAsset(b)?0:1;return A-B});
+tbody.innerHTML=rows.map(row).join('')||
 '<tr><td colspan="3" style="color:var(--muted);text-align:center;padding:18px">Data belum tersedia</td></tr>';
 var rows=tbody.querySelectorAll('tr[data-c]'),i;
 for(i=0;i<rows.length;i++)rows[i].addEventListener('click',function(){
