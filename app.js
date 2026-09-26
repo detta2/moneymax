@@ -12,46 +12,75 @@ toName=id('toName'),toast=id('toast');
 /* ---------- i18n ---------- */
 var LANG='id';
 var STR={
- id:{conv:'Konverter',subAmount:'Input jumlah, pilih pasangan mata uang',clear:'Bersihkan jumlah',
+ id:{conv:'Konverter',subAmount:'Masukkan jumlah, lalu pilih mata uangnya',clear:'Bersihkan jumlah',
+  amtA:'Jumlah mata uang yang ingin dikonversi',fromA:'Pilih mata uang asal',toA:'Pilih mata uang tujuan',
   search:'Cari mata uang…',res:'Hasil Konversi',copy:'⧉ Salin',copyA:'Salin hasil konversi',copyOk:'Disalin',
-  noRes:'Belum ada hasil',favHint:'Pasangan favorit',chartSub:'Pergerakan kurs historis',
+  noRes:'Belum ada hasil',chartSub:'Pergerakan kurs historis',
   tbl:'Kurs Populer',tblSub:'Kurs tengah real-time · 1',tblC:'Mata Uang',tblR:'Kurs',tblC24:'Perubahan 24H',
-  loading:'Memuat kurs live…',sync:'Sinkron grafik…',live:'Live · diperbarui',refresh:'Live · refresh',
+  loading:'Memuat kurs live…',sync:'Menyinkronkan grafik…',live:'Live · diperbarui',refresh:'Refresh berikutnya',
   fail:'Gagal memuat kurs: ',retry:'. Mencoba lagi…',nodata:'Data belum tersedia',
-  noHist:'Memuat data grafik…',swapA:'Tukar mata uang asal dan tujuan',swapT:'Tukar posisi (S)',
-  crypto:'Crypto',metal:'Logam',up:'Naik',down:'Turun',heroT:'Konversi Mata Uang,',heroE:'Crypto & Emas',
+  swapA:'Tukar mata uang asal dan tujuan',swapT:'Tukar posisi (S)',
+  crypto:'Crypto',metal:'Logam',rangeLbl:'Rentang waktu',rangeA:'Rentang waktu grafik',
+  t1:'100% Gratis',t1s:'Tanpa akun, tanpa biaya, tanpa batas konversi',
+  t2:'Real-Time',t2s:'Kurs diperbarui otomatis setiap 60 detik',
+  t3:'Privasi Aman',t3s:'Tanpa cookie pelacak, tanpa penyimpanan data',
+  t4:'Grafik Historis',t4s:'Pantau pergerakan kurs 7–90 hari',
+  foot1:'160+ fiat · 10 crypto · emas & perak · auto-refresh 60 detik',
+  foot2:'Kebijakan Privasi',foot3:'Ketentuan Layanan',foot4:'Disclaimer',
+  heroT:'Konversi Mata Uang,',heroE:'Crypto & Emas',
   heroP:'160+ mata uang dunia, 10 crypto, emas & perak — kurs live, grafik historis, auto-refresh 60 detik.',
   langBtn:'English'},
- en:{conv:'Converter',subAmount:'Enter amount, choose currency pair',clear:'Clear amount',
+ en:{conv:'Converter',subAmount:'Enter the amount, then pick the currencies',clear:'Clear amount',
+  amtA:'Amount to convert',fromA:'Choose source currency',toA:'Choose target currency',
   search:'Search currency…',res:'Conversion Result',copy:'⧉ Copy',copyA:'Copy conversion result',copyOk:'Copied',
-  noRes:'No result yet',favHint:'Favorite pairs',chartSub:'Historical rate movement',
+  noRes:'No result yet',chartSub:'Historical rate movement',
   tbl:'Popular Rates',tblSub:'Real-time mid rate · 1',tblC:'Currency',tblR:'Rate',tblC24:'24H Change',
-  loading:'Loading live rates…',sync:'Syncing chart…',live:'Live · updated',refresh:'Live · refresh in',
+  loading:'Loading live rates…',sync:'Syncing chart…',live:'Live · updated',refresh:'Next refresh in',
   fail:'Failed to load rates: ',retry:'. Retrying…',nodata:'Data not available yet',
-  noHist:'Loading chart data…',swapA:'Swap source and target currency',swapT:'Swap position (S)',
-  crypto:'Crypto',metal:'Metal',up:'Up',down:'Down',heroT:'Convert Currency,',heroE:'Crypto & Gold',
-  heroP:'160+ world currencies, 10 crypto, gold & silver — live rates, historical chart, auto-refresh every 60s.',
+  swapA:'Swap source and target currency',swapT:'Swap position (S)',
+  crypto:'Crypto',metal:'Metal',rangeLbl:'Time range',rangeA:'Chart time range',
+  t1:'100% Free',t1s:'No account, no fees, unlimited conversions',
+  t2:'Real-Time',t2s:'Rates auto-update every 60 seconds',
+  t3:'Privacy Safe',t3s:'No tracking cookies, no data stored',
+  t4:'Historical Charts',t4s:'Track rate movement over 7–90 days',
+  foot1:'160+ fiat · 10 cryptos · gold & silver · auto-refresh every 60s',
+  foot2:'Privacy Policy',foot3:'Terms of Service',foot4:'Disclaimer',
+  heroT:'Convert Currency,',heroE:'Crypto & Gold',
+  heroP:'160+ world currencies, 10 cryptos, gold & silver — live rates, historical charts, auto-refresh every 60s.',
   langBtn:'Bahasa Indonesia'}
 };
 function T(k){var v=(STR[LANG]||STR.id)[k];return v===undefined?k:v}
-function t(x){return x}
+var busy=false;
 function applyLang(){
+ document.documentElement.lang=LANG;
+ document.body.classList.toggle('lang-en',LANG==='en');
+ document.body.classList.toggle('lang-id',LANG!=='en');
  var h2=id('heroT'),he=id('heroE'),hp=id('heroP');
  if(h2)h2.textContent=T('heroT');if(he)he.textContent=T('heroE');if(hp)hp.textContent=T('heroP');
  if(id('cardTitle'))id('cardTitle').textContent=T('conv');
  if(id('cardSub'))id('cardSub').textContent=T('subAmount');
- amt.setAttribute('aria-label',T('clear').replace('Bersihkan ','')||'Amount');
+ amt.setAttribute('aria-label',T('amtA'));
  id('clr').setAttribute('aria-label',T('clear'));
  id('clr').setAttribute('title',T('clear'));
  fromSearch.placeholder=T('search');toSearch.placeholder=T('search');
- fromBtn.setAttribute('aria-label',T('swapA'));
+ fromBtn.setAttribute('aria-label',T('fromA'));
+ toBtn.setAttribute('aria-label',T('toA'));
  swap.setAttribute('aria-label',T('swapA'));swap.setAttribute('title',T('swapT'));
  id('resLbl').textContent=T('res');
  id('copy').textContent=T('copy');id('copy').setAttribute('aria-label',T('copyA'));
  id('chartSub').textContent=T('chartSub');
  id('tblTitle').textContent=T('tbl');id('tblSub').innerHTML=T('tblSub')+' <b id="tblBase">'+tblBase.textContent+'</b> =';
  id('thC').textContent=T('tblC');id('thR').textContent=T('tblR');id('th24').textContent=T('tblC24');
+ id('rangeLbl').textContent=T('rangeLbl');
+ id('range').setAttribute('aria-label',T('rangeA'));
+ var tr={trust1:'t1',trust1s:'t1s',trust2:'t2',trust2s:'t2s',trust3:'t3',trust3s:'t3s',trust4:'t4',trust4s:'t4s'};
+ var els=document.querySelectorAll('[data-i]'),i;
+ for(i=0;i<els.length;i++){var k=els[i].getAttribute('data-i');
+ if(tr[k])els[i].textContent=T(tr[k])}
+ var f1=id('foot1');if(f1)f1.textContent=T('foot1');
+ ['foot2','foot3','foot4'].forEach(function(k){var e=id(k);if(e)e.textContent=T(k)});
  var lb=id('langBtn');if(lb)lb.textContent=T('langBtn');
+ renderTable();
 }
 function setLang(l){LANG=(l==='en')?'en':'id';applyLang();renderItemsAll();saveLang();
  if(!loading)loadHist();
@@ -62,7 +91,7 @@ function bindLang(){var b=id('langBtn');if(b)b.addEventListener('click',function
 
 
 var N={'USD':'Dolar AS','EUR':'Euro','IDR':'Rupiah','JPY':'Yen Jepang','GBP':'Pound Inggris','AUD':'Dolar Australia','CAD':'Dolar Kanada','CHF':'Franc Swiss','CNY':'Yuan Cina','SGD':'Dolar Singapura','MYR':'Ringgit','THB':'Baht','KRW':'Won Korsel','HKD':'Dolar Hong Kong','INR':'Rupee India','AED':'Dirham','SAR':'Riyal','NZD':'Dolar Selandia','SEK':'Krona Swedia','NOK':'Krone Norwegia','DKK':'Krone Denmark','RUB':'Rubel Rusia','CZK':'Koruna','PLN':'Zloty','TRY':'Lira Turki','BRL':'Real Brazil','MXN':'Peso Meksiko','ZAR':'Rand Afrika','PHP':'Peso Filipina','VND':'Dong Vietnam','PKR':'Rupee Pakistan','BDT':'Taka','NGN':'Naira','EGP':'Pound Mesir','KES':'Shilling Kenya','MAD':'Dirham Maroko','HUF':'Forint','RON':'Leu Rumania','BGN':'Lev Bulgaria','HRK':'Kuna','ISK':'Krona Islandia','ILS':'Shekel','JOD':'Dinar Yordania','KWD':'Dinar Kuwait','QAR':'Riyal Qatar','OMR':'Rial Oman','BHD':'Dinar Bahrain','LKR':'Rupee Sri Lanka','NPR':'Rupee Nepal','MMK':'Kyat','KHR':'Riel','LAK':'Kip','TWD':'Dolar Taiwan','BTC':'Bitcoin','ETH':'Ethereum','SOL':'Solana','BNB':'BNB','XRP':'XRP','DOGE':'Dogecoin','USDT':'Tether USD','TRX':'TRON','ADA':'Cardano','LINK':'Chainlink','XAU':'Emas (per tr oz)','XAG':'Perak (per tr oz)'};
-var NE={'USD':'US Dollar','EUR':'Euro','IDR':'Rupiah','JPY':'Japanese Yen','GBP':'British Pound','AUD':'Australian Dollar','CAD':'Canadian Dollar','CHF':'Swiss Franc','CNY':'Chinese Yuan','SGD':'Singapore Dollar','MYR':'Ringgit','THB':'Baht','KRW':'South Korean Won','HKD':'Hong Kong Dollar','INR':'Indian Rupee','AED':'Dirham','SAR':'Riyal','NZD':'New Zealand Dollar','SEK':'Swedish Krona','NOK':'Norwegian Krone','DKK':'Danish Krone','RUB':'Russian Ruble','CZK':'Koruna','PLN':'Zloty','TRY':'Turkish Lira','BRL':'Brazilian Real','MXN':'Mexican Peso','ZAR':'South African Rand','PHP':'Philippine Peso','VND':'Vietnamese Dong','PKR':'Pakistani Rupee','BDT':'Taka','NGN':'Naira','EGP':'Egyptian Pound','KES':'Kenyan Shilling','MAD':'Moroccan Dirham','HUF':'Forint','RON':'Romanian Leu','BGN':'Bulgarian Lev','HRK':'Kuna','ISK':'Icelandic Krona','ILS':'Shekel','JOD':'Jordanian Dinar','KWD':'Kuwaiti Dinar','QAR':'Qatari Riyal','OMR':'Omani Rial','BHD':'Bahraini Dinar','LKR':'Sri Lankan Rupee','NPR':'Nepalese Rupee','MMK':'Kyat','KHR':'Riel','LAK':'Kip','TWD':'Taiwan Dollar','BTC':'Bitcoin','ETH':'Ethereum','SOL':'Solana','BNB':'BNB','XRP':'XRP','DOGE':'Dogecoin','USDT':'Tether USD','TRX':'TRON','ADA':'Cardano','LINK':'Chainlink','XAU':'Gold (per troy oz)','XAG':'Silver (per troy oz)'};
+var NE={'USD':'US Dollar','EUR':'Euro','IDR':'Rupiah','JPY':'Japanese Yen','GBP':'British Pound','AUD':'Australian Dollar','CAD':'Canadian Dollar','CHF':'Swiss Franc','CNY':'Chinese Yuan','SGD':'Singapore Dollar','MYR':'Malaysian Ringgit','THB':'Thai Baht','KRW':'South Korean Won','HKD':'Hong Kong Dollar','INR':'Indian Rupee','AED':'UAE Dirham','SAR':'Saudi Riyal','NZD':'New Zealand Dollar','SEK':'Swedish Krona','NOK':'Norwegian Krone','DKK':'Danish Krone','RUB':'Russian Ruble','CZK':'Czech Koruna','PLN':'Polish Zloty','TRY':'Turkish Lira','BRL':'Brazilian Real','MXN':'Mexican Peso','ZAR':'South African Rand','PHP':'Philippine Peso','VND':'Vietnamese Dong','PKR':'Pakistani Rupee','BDT':'Bangladeshi Taka','NGN':'Nigerian Naira','EGP':'Egyptian Pound','KES':'Kenyan Shilling','MAD':'Moroccan Dirham','HUF':'Hungarian Forint','RON':'Romanian Leu','BGN':'Bulgarian Lev','HRK':'Croatian Kuna','ISK':'Icelandic Krona','ILS':'Israeli Shekel','JOD':'Jordanian Dinar','KWD':'Kuwaiti Dinar','QAR':'Qatari Riyal','OMR':'Omani Rial','BHD':'Bahraini Dinar','LKR':'Sri Lankan Rupee','NPR':'Nepalese Rupee','MMK':'Myanmar Kyat','KHR':'Cambodian Riel','LAK':'Lao Kip','TWD':'Taiwan Dollar','BTC':'Bitcoin','ETH':'Ethereum','SOL':'Solana','BNB':'BNB','XRP':'XRP','DOGE':'Dogecoin','USDT':'Tether USD','TRX':'TRON','ADA':'Cardano','LINK':'Chainlink','XAU':'Gold (per troy oz)','XAG':'Silver (per troy oz)'};
 function nm(c){return LANG==='en'?(NE[c]||N[c]||c):(N[c]||c)}
 var P=['USD','EUR','IDR','JPY','GBP','AUD','CAD','CHF','CNY','SGD','MYR','THB','KRW','HKD','INR','AED','SAR','NZD','SEK','NOK','DKK','RUB','CZK','PLN','TRY','BRL','MXN','ZAR','PHP','VND','PKR','BDT','NGN','EGP','KES','MAD','HUF','RON','BGN','HRK','ISK','ILS','JOD','KWD','QAR','OMR','BHD','LKR','NPR','MMK','KHR','LAK','TWD','BTC','ETH','SOL','BNB','XRP','DOGE','USDT','TRX','ADA','LINK','XAU','XAG'];
 var CRYPTO=['BTC','ETH','SOL','BNB','XRP','DOGE','USDT','TRX','ADA','LINK'],METAL=['XAU','XAG'];
@@ -201,21 +230,21 @@ cv.addEventListener('mouseleave',function(){hover=-1;tip.style.opacity=0;draw()}
 cv.addEventListener('touchend',function(){hover=-1;tip.style.opacity=0;draw()});
 
 function loadHist(){var u='/api/history?base='+fromCur+'&target='+toCur+'&days='+days;
-stext.textContent=T('sync');dot.classList.add('sync');
+busy=true;stext.textContent=T('sync');dot.classList.add('sync');
 fetch(u).then(function(r){return r.json()}).then(function(d){
 hist=d.points||[];draw()}).catch(function(){hist=[];draw()}).finally(function(){
-stext.textContent=T('live')+' '+fromCur+'/'+toCur;dot.classList.remove('sync')})}
+busy=false;stext.textContent=T('live')+' '+fromCur+'/'+toCur;dot.classList.remove('sync')})}
 
 var refreshIn=60;
-function loadRates(){stext.textContent=T('loading');dot.classList.add('sync');
+function loadRates(){busy=true;stext.textContent=T('loading');dot.classList.add('sync');
 fetch('/api/rates?base='+fromCur).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json()})
 .then(function(d){rates=d.rates||{};prev=d.prev||{};loading=false;
 convert();renderTable();loadHist();refreshIn=60;
 stext.textContent=T('live')+' '+new Date().toLocaleTimeString(LANG==='en'?'en-US':'id-ID',{hour:'2-digit',minute:'2-digit',second:'2-digit'})})
-.catch(function(e){loading=false;showErr(T('fail')+e.message+T('retry'))})
+.catch(function(e){loading=false;busy=false;showErr(T('fail')+e.message+T('retry'))})
 .finally(function(){dot.classList.remove('sync')})}
 function tick(){refreshIn--;if(refreshIn<=0){loadRates();return}
-if(!/Sinkron|Memuat|Sync|Load/.test(stext.textContent))stext.textContent=T('refresh')+' '+refreshIn+'s';}
+if(!busy)stext.textContent=T('refresh')+' '+refreshIn+'s';}
 setInterval(tick,1000);
 
 function doSwap(){var t=fromCur;fromCur=toCur;toCur=t;
@@ -229,8 +258,8 @@ id('clr').addEventListener('click',function(){amt.value='';convert()});
 id('copy').addEventListener('click',function(){
 var t2=out.textContent;if(t2==='—'){showToast(T('noRes'));return}
 var done=function(){showToast(T('copyOk')+': '+t2+' '+toCur)};
-if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t+' '+toCur).then(done).catch(done)}
-else{var ta=document.createElement('textarea');ta.value=t+' '+toCur;document.body.appendChild(ta);ta.select();
+if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t2+' '+toCur).then(done).catch(done)}
+else{var ta=document.createElement('textarea');ta.value=t2+' '+toCur;document.body.appendChild(ta);ta.select();
 try{document.execCommand('copy')}catch(e){}ta.remove();done()}});
 id('quick').innerHTML=['100','500','1000','5000','10000','100000'].map(function(v){
 return '<button data-v="'+v+'">'+fmt(+v,0)+'</button>'}).join('');

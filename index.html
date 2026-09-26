@@ -259,7 +259,8 @@ background:rgba(255,255,255,.96);border:1px solid var(--stroke);backdrop-filter:
 box-shadow:0 10px 26px rgba(4,120,87,.25);transition:opacity .15s}
 .tooltip b{color:var(--acc);font-size:13px}
 .tooltip span{color:var(--muted)}
-.range{display:flex;gap:7px;margin-top:14px;flex-wrap:wrap;position:relative;z-index:1}
+.range{display:flex;gap:7px;margin-top:14px;flex-wrap:wrap;position:relative;z-index:1;align-items:center}
+.range-lbl{font-size:10.5px;letter-spacing:1.4px;text-transform:uppercase;color:var(--muted);font-weight:700;margin-right:2px}
 .range button{flex:1;min-width:56px;padding:8px 6px;border-radius:11px;font-size:12px;font-weight:700;cursor:pointer;
 color:var(--muted);background:rgba(255,255,255,.7);border:1px solid var(--stroke2);transition:.18s}
 .range button:hover{color:var(--acc);background:rgba(5,150,105,.10)}
@@ -286,6 +287,9 @@ box-shadow:0 0 0 1px rgba(4,120,87,.25)}
 background:rgba(255,255,255,.75);border:1px solid var(--stroke);box-shadow:0 2px 8px rgba(4,120,87,.10);
 transition:.18s;flex:none}
 .langbtn:hover{background:rgba(5,150,105,.12);border-color:rgba(5,150,105,.45);color:#065f46}
+.lang-en .lang-id{display:none}
+.lang-id .lang-en{display:none}
+.lang-block{animation:none}
 .scroll{max-height:320px;overflow-y:auto;border-radius:14px;position:relative;z-index:1}
 .scroll::-webkit-scrollbar{width:8px}
 .scroll::-webkit-scrollbar-thumb{background:rgba(5,150,105,.22);border-radius:99px}
@@ -346,10 +350,10 @@ background:linear-gradient(135deg,rgba(5,150,105,.16),rgba(201,151,27,.16));bord
     <p id="heroP">160+ mata uang dunia, 10 crypto, emas & perak — kurs live, grafik historis, auto-refresh 60 detik.</p>
   </div>
   <section class="trust">
-    <div class="trust-item"><span class="ti-ic">✓</span><div><b>100% Gratis</b><br><small>Tanpa akun, tanpa biaya, tanpa batas konversi</small></div></div>
-    <div class="trust-item"><span class="ti-ic">⚡</span><div><b>Real-Time</b><br><small>Kurs diperbarui otomatis setiap 60 detik</small></div></div>
-    <div class="trust-item"><span class="ti-ic">🔒</span><div><b>Privasi Aman</b><br><small>Tanpa cookie pelacak, tanpa penyimpanan data</small></div></div>
-    <div class="trust-item"><span class="ti-ic">📈</span><div><b>Grafik Historis</b><br><small>Pantau pergerakan kurs 7–90 hari</small></div></div>
+    <div class="trust-item"><span class="ti-ic">✓</span><div><b data-i="trust1">100% Gratis</b><br><small data-i="trust1s">Tanpa akun, tanpa biaya, tanpa batas konversi</small></div></div>
+    <div class="trust-item"><span class="ti-ic">⚡</span><div><b data-i="trust2">Real-Time</b><br><small data-i="trust2s">Kurs diperbarui otomatis setiap 60 detik</small></div></div>
+    <div class="trust-item"><span class="ti-ic">🔒</span><div><b data-i="trust3">Privasi Aman</b><br><small data-i="trust3s">Tanpa cookie pelacak, tanpa penyimpanan data</small></div></div>
+    <div class="trust-item"><span class="ti-ic">📈</span><div><b data-i="trust4">Grafik Historis</b><br><small data-i="trust4s">Pantau pergerakan kurs 7–90 hari</small></div></div>
   </section>
   <div class="grid">
     <section class="glass card card-pad" aria-label="Konverter" id="converter">
@@ -400,6 +404,7 @@ background:linear-gradient(135deg,rgba(5,150,105,.16),rgba(201,151,27,.16));bord
       </div>
       <div class="canvas-wrap"><canvas id="cv" aria-label="Grafik pergerakan kurs" role="img"></canvas><div class="tooltip" id="tip"></div></div>
       <div class="range" id="range" role="group" aria-label="Rentang waktu grafik">
+        <span class="range-lbl" id="rangeLbl">Rentang waktu</span>
         <button data-d="7">7H</button>
         <button data-d="14">14H</button>
         <button data-d="30" class="on" aria-pressed="true">30H</button>
@@ -418,6 +423,7 @@ background:linear-gradient(135deg,rgba(5,150,105,.16),rgba(201,151,27,.16));bord
     </div>
   </section>
   <section class="glass card card-pad seo" style="margin-top:22px">
+    <div lang="id" class="lang-block lang-id">
     <h3>Tentang Konverter Mata Uang MoneyMax</h3>
     <p><strong>MoneyMax</strong> adalah konverter mata uang gratis yang membantu Anda melihat nilai tukar
     berbagai mata uang dunia secara <strong>real-time</strong>. Dengan satu alat, Anda dapat mengonversi
@@ -459,11 +465,54 @@ background:linear-gradient(135deg,rgba(5,150,105,.16),rgba(201,151,27,.16));bord
     <p>MoneyMax cocok untuk <em>traveler</em> yang ingin memperkirakan budget luar negeri, pelaku
     <em>usaha</em> yang memantau kurs valas, investor crypto yang menghitung nilai portofolio dalam
     Rupiah, serta siapa pun yang butuh melihat nilai tukar terkini dengan cepat dan gratis.</p>
+    </div>
+    <div lang="en" class="lang-block lang-en" hidden>
+    <h3>About the MoneyMax Currency Converter</h3>
+    <p><strong>MoneyMax</strong> is a free currency converter that shows you exchange rates for
+    currencies worldwide in <strong>real time</strong>. One tool covers <strong>160+ currencies</strong> —
+    from US Dollar (USD), Euro (EUR), Rupiah (IDR), Japanese Yen (JPY), British Pound (GBP) to Chinese
+    Yuan (CNY) — plus <strong>cryptocurrencies</strong> like Bitcoin (BTC), Ethereum (ETH) and Solana
+    (SOL), along with <strong>gold (XAU)</strong> and <strong>silver (XAG)</strong>.</p>
+
+    <h4>Most searched currency conversions</h4>
+    <ul>
+      <li><strong>1 USD to IDR</strong> — see how many Rupiah you get for every US Dollar</li>
+      <li><strong>1 EUR to IDR</strong> — convert Euro to Rupiah for travel or business</li>
+      <li><strong>1 SGD to IDR</strong> — Singapore Dollar to Rupiah rate</li>
+      <li><strong>1 JPY to IDR</strong> — Japanese Yen to Rupiah exchange rate</li>
+      <li><strong>1 BTC to IDR</strong> — Bitcoin price in Rupiah, updated in real time</li>
+      <li><strong>Gold price today</strong> — track gold movements per troy ounce</li>
+    </ul>
+
+    <h4>Why MoneyMax</h4>
+    <ul>
+      <li><strong>Live rates from multiple sources</strong> — data aggregated from several providers to
+      reduce the risk of errors</li>
+      <li><strong>Historical movement charts</strong> — pick 7-day, 14-day, 30-day or 90-day ranges to
+      spot currency trends</li>
+      <li><strong>Fast currency search</strong> — type the code (USD) or the name (US Dollar), the
+      currency appears instantly</li>
+      <li><strong>24-hour change</strong> — see whether a currency is strengthening or weakening today</li>
+      <li><strong>Auto-refresh every 60 seconds</strong> — rates stay fresh without reloading the page</li>
+      <li><strong>Privacy preserved</strong> — no account, no tracking cookies, no stored personal data</li>
+    </ul>
+
+    <h4>How to use MoneyMax</h4>
+    <p>Enter the amount you want to convert in the input field, then choose the source and target
+    currencies. The result appears instantly along with the rate for 1 unit of the source currency and
+    its percentage change over the last 24 hours. Use the <strong>⇄</strong> button to swap the currency
+    positions, or pick another currency straight from the "Popular Rates" table below.</p>
+
+    <h4>Who is MoneyMax for?</h4>
+    <p>MoneyMax is ideal for <em>travelers</em> budgeting a trip abroad, <em>business owners</em>
+    monitoring FX rates, crypto investors calculating portfolio value in Rupiah, and anyone who needs
+    the latest exchange rates fast and free.</p>
+    </div>
   </section>
   <footer>
     MoneyMax · Data: open.er-api.com · frankfurter.dev · coingecko · gold-api · currency-api<br>
-    160+ fiat · 10 crypto · emas & perak · auto-refresh 60 detik<br>
-    <a href="/privacy">Kebijakan Privasi</a> · <a href="/terms">Ketentuan Layanan</a> · <a href="/disclaimer">Disclaimer</a><br>
+    <span id="foot1">160+ fiat · 10 crypto · emas & perak · auto-refresh 60 detik</span><br>
+    <a href="/privacy" id="foot2">Kebijakan Privasi</a> · <a href="/terms" id="foot3">Ketentuan Layanan</a> · <a href="/disclaimer" id="foot4">Disclaimer</a><br>
     © 2026 <a href="https://moneymax-gold.vercel.app">moneymax-gold.vercel.app</a>
   </footer>
 </div>
