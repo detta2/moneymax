@@ -262,13 +262,21 @@ if(!busy)stext.textContent=T('refresh')+' '+refreshIn+'s'}
 setInterval(tick,1000);
 
 /* ---------- TradingView ---------- */
-var CRYPTO_TV={BTC:'BINANCE:BTC',ETH:'BINANCE:ETH',SOL:'BINANCE:SOL',BNB:'BINANCE:BNB',XRP:'RIPPLE',DOGE:'BINANCE:DOGE',USDT:'BINANCE:USDT',TRX:'TRON',ADA:'CARDANO',LINK:'CHAINLINK'};
+// TradingView butuh exchange prefix yang benar per instrumen:
+//   fiat  -> FX_IDC (penyedia FX retail TradingView, mencakup IDR)
+//   crypto-> BINANCE (kecuali XRP->RIPPLE, TRX->TRON, ADA->CARDANO, LINK->CHAINLINK)
+//   XAU   -> OANDA:XAUUSD, XAG -> TVC:SILVER
+var CRYPTO_TV={BTC:'BINANCE:BTC',ETH:'BINANCE:ETH',SOL:'BINANCE:SOL',BNB:'BINANCE:BNB',
+XRP:'BINANCE:XRP',DOGE:'BINANCE:DOGE',USDT:'BINANCE:USDT',TRX:'BINANCE:TRX',ADA:'BINANCE:ADA',LINK:'BINANCE:LINK'};
 function tvSymbol(a,b){
-  if(CRYPTO_TV[a])return CRYPTO_TV[a]+b;
-  if(CRYPTO_TV[b])return CRYPTO_TV[b]+a;
+  // crypto di salah satu sisi: TradingView hanya punya pair crypto/USD di BINANCE
+  // (XRPIDR dll tidak ada), jadi quote selalu ke USD. Kalau lawannya USD -> pas.
+  if(CRYPTO_TV[a]&&CRYPTO_TV[b])return CRYPTO_TV[a]+'USD';         // crypto/crypto -> USD quote
+  if(CRYPTO_TV[a])return CRYPTO_TV[a]+'USD';                       // crypto -> USD pair
+  if(CRYPTO_TV[b])return CRYPTO_TV[b]+'USD';                       // fiat -> crypto USD pair
   if(a==='XAU'||b==='XAU')return 'OANDA:XAUUSD';
-  if(a==='XAG'||b==='XAG')return 'OANDA:XAGUSD';
-  return 'FX:'+a+b;
+  if(a==='XAG'||b==='XAG')return 'TVC:SILVER';
+  return 'FX_IDC:'+a+b;                                            // fiat -> fiat
 }
 var tvCur='',tvReady=false;
 function tvLoad(kind,sym,host,extra){
