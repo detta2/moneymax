@@ -10,7 +10,7 @@ fromCode=id('fromCode'),toCode=id('toCode'),fromName=id('toName')?id('fromName')
 toName=id('toName'),toast=id('toast');
 
 /* ---------- i18n ---------- */
-var LANG='en';
+var LANG='id';
 var STR={
  id:{conv:'Konverter',subAmount:'Masukkan jumlah, lalu pilih mata uangnya',clear:'Bersihkan jumlah',
   amtA:'Jumlah mata uang yang ingin dikonversi',fromA:'Pilih mata uang asal',toA:'Pilih mata uang tujuan',
@@ -19,10 +19,13 @@ var STR={
   tbl:'Kurs Populer',tblSub:'Kurs tengah real-time · 1',tblC:'Mata Uang',tblR:'Kurs',tblC24:'Perubahan 24H',
   loading:'Memuat kurs live…',sync:'Menyinkronkan grafik…',live:'Live · diperbarui',refresh:'Refresh berikutnya',
   fail:'Gagal memuat kurs: ',retry:'. Mencoba lagi…',nodata:'Data belum tersedia',
+  updLoad:'kurs sedang dimuat…',updAt:'kurs diperbarui pukul',srcLbl:'sumber',
+  srcMap:{'open.er-api.com':'ExchangeRate-API (open.er-api.com)','api.frankfurter.app':'Frankfurter (frankfurter.dev)',
+    'cdn.jsdelivr.net':'Currency-API (fawazahmed0)','coingecko+er-api':'CoinGecko + ExchangeRate-API'},
   swapA:'Tukar mata uang asal dan tujuan',swapT:'Tukar posisi (S)',
   crypto:'Crypto',metal:'Logam',rangeLbl:'Rentang waktu',rangeA:'Rentang waktu grafik',
   tblFi:'Mata Uang',tblCr:'Crypto & Logam',tbl24:'Perubahan 24H',thA:'Aset',
-  seoTentang:'Tentang Konverter Mata Uang MoneyMax',jumpConv:'Konverter',jumpChart:'Grafik',jumpTV:'TradingView',jumpBea:'Bea Masuk',jumpRate:'Kurs',jumpWhy:'Mengapa',
+  seoTentang:'Tentang Konverter Mata Uang MoneyMax',faqT:'Pertanyaan yang Sering Diajukan',jumpConv:'Konverter',jumpChart:'Grafik',jumpTV:'TradingView',jumpBea:'Bea Masuk',jumpRate:'Kurs',jumpFAQ:'FAQ',jumpWhy:'Mengapa',
   bcNilaiPabean:'Nilai Pabean (CIF)',bcBea:'Bea Masuk',bcPpn:'PPN 11%',bcPph:'PPh 22 Impor',
   bcTotal:'Total Pajak',bcLanded:'Total Biaya Lengkap (barang + pajak)',
   t1:'100% Gratis',t1s:'Tanpa akun, tanpa biaya, tanpa batas konversi',
@@ -32,6 +35,7 @@ var STR={
   trustT:'Mengapa MoneyMax?',
   foot1:'160+ fiat · 10 crypto · emas & perak · auto-refresh 60 detik',
   foot2:'Kebijakan Privasi',foot3:'Ketentuan Layanan',foot4:'Disclaimer',
+  foot5:'Tentang',foot6:'Kontak',
   heroT:'Konversi Mata Uang,',heroE:'Crypto & Emas',
   heroP:'160+ mata uang dunia, 10 crypto, emas & perak — kurs live, grafik historis, auto-refresh 60 detik.',
   langBtn:'English'},
@@ -42,10 +46,13 @@ var STR={
   tbl:'Popular Rates',tblSub:'Real-time mid rate · 1',tblC:'Currency',tblR:'Rate',tblC24:'24H Change',
   loading:'Loading live rates…',sync:'Syncing chart…',live:'Live · updated',refresh:'Next refresh in',
   fail:'Failed to load rates: ',retry:'. Retrying…',nodata:'Data not available yet',
+  updLoad:'loading rates…',updAt:'rates updated at',srcLbl:'source',
+  srcMap:{'open.er-api.com':'ExchangeRate-API (open.er-api.com)','api.frankfurter.app':'Frankfurter (frankfurter.dev)',
+    'cdn.jsdelivr.net':'Currency-API (fawazahmed0)','coingecko+er-api':'CoinGecko + ExchangeRate-API'},
   swapA:'Swap source and target currency',swapT:'Swap position (S)',
   crypto:'Crypto',metal:'Metal',rangeLbl:'Time range',rangeA:'Chart time range',
   tblFi:'Fiat Currencies',tblCr:'Crypto & Metals',tbl24:'24H Change',thA:'Asset',
-  seoTentang:'About the MoneyMax Currency Converter',jumpConv:'Converter',jumpChart:'Chart',jumpTV:'TradingView',jumpBea:'Import Tax',jumpRate:'Rates',jumpWhy:'Why',
+  seoTentang:'About the MoneyMax Currency Converter',faqT:'Frequently Asked Questions',jumpConv:'Converter',jumpChart:'Chart',jumpTV:'TradingView',jumpBea:'Import Tax',jumpRate:'Rates',jumpFAQ:'FAQ',jumpWhy:'Why',
   bcNilaiPabean:'Customs Value (CIF)',bcBea:'Import Duty',bcPpn:'VAT',bcPph:'Income Tax Art.22',
   bcTotal:'Total Tax',bcLanded:'Landed Cost (goods + tax)',
   t1:'100% Free',t1s:'No account, no fees, unlimited conversions',
@@ -55,6 +62,7 @@ var STR={
   trustT:'Why MoneyMax?',
   foot1:'160+ fiat · 10 cryptos · gold & silver · auto-refresh every 60s',
   foot2:'Privacy Policy',foot3:'Terms of Service',foot4:'Disclaimer',
+  foot5:'About',foot6:'Contact',
   heroT:'Convert Currency,',heroE:'Crypto & Gold',
   heroP:'160+ world currencies, 10 cryptos, gold & silver — live rates, historical charts, auto-refresh every 60s.',
   langBtn:'Bahasa Indonesia'}
@@ -86,17 +94,17 @@ function applyLang(){
  id('rangeLbl').textContent=T('rangeLbl');
  id('range').setAttribute('aria-label',T('rangeA'));
  if(tvReady)tvRender();
- var jl={jumpConv:'jumpConv',jumpChart:'jumpChart',jumpTV:'jumpTV',jumpBea:'jumpBea',jumpRate:'jumpRate',jumpWhy:'jumpWhy'};
+ var jl={jumpConv:'jumpConv',jumpChart:'jumpChart',jumpTV:'jumpTV',jumpBea:'jumpBea',jumpRate:'jumpRate',jumpFAQ:'jumpFAQ',jumpWhy:'jumpWhy'};
  var jb=id('jumpto');
  if(jb){var jbt=jb.querySelectorAll('button'),k=0;
  for(k=0;k<jbt.length;k++){var jk=jbt[k].dataset.j;if(jl[jk])jbt[k].textContent=T(jl[jk])}}
- var tr={trust1:'t1',trust1s:'t1s',trust2:'t2',trust2s:'t2s',trust3:'t3',trust3s:'t3s',trust4:'t4',trust4s:'t4s',trustT:'trustT'};
+ var tr={trust1:'t1',trust1s:'t1s',trust2:'t2',trust2s:'t2s',trust3:'t3',trust3s:'t3s',trust4:'t4',trust4s:'t4s',trustT:'trustT',faqT:'faqT'};
  var els=document.querySelectorAll('[data-i]'),i;
  for(i=0;i<els.length;i++){var k=els[i].getAttribute('data-i');
  if(tr[k])els[i].textContent=T(tr[k])}
  var f1=id('foot1');if(f1)f1.textContent=T('foot1');
- ['foot2','foot3','foot4'].forEach(function(k){var e=id(k);if(e)e.textContent=T(k)});
- var lb=id('langBtn');if(lb)lb.textContent=T('langBtn');
+ ['foot2','foot3','foot4','foot5','foot6'].forEach(function(k){var e=id(k);if(e)e.textContent=T(k)});
+ var lb=id('langBtn');if(lb)lb.textContent=T('langBtn');renderUpd();
  renderTable();
 }
 function setLang(l){LANG=(l==='en')?'en':'id';applyLang();renderItemsAll();saveLang();
@@ -183,8 +191,11 @@ var p=prev[c],ch=p?(r-p)/p*100:null,ar=ch===null?'—':(ch>=0?'▲':'▼');
 var tag=isAsset(c)?(METAL.indexOf(c)>-1?' <span class="tg metal">'+T('metal')+'</span>':(' <span class="tg crypto">'+T('crypto')+'</span>')):'';
 return '<tr data-c="'+c+'"><td>'+flag(c)+'<span class="nm">'+c+'</span> <span class="cd">'+esc(nm(c))+tag+'</span></td>'+
 '<td class="vl">'+fmt(r,4)+'</td><td class="vl" style="color:'+(ch===null?'var(--muted)':(ch>=0?'var(--up)':'var(--down)'))+'">'+ar+' '+(ch===null?'':Math.abs(ch).toFixed(2)+'%')+'</td></tr>'};
+var PRIOR=['USD','EUR','SGD','JPY','AUD','CNY','SAR','HKD','MYR','THB','KRW','GBP','INR','NZD','CAD','CHF','AED','SEK','NOK','DKK','BRL','ZAR','TRY','PLN','RUB'];
 var pick=function(list){return list.filter(function(c){return rates[c]&&c!==fromCur}).map(row).join('')};
-var f=pick(P.filter(function(c){return!isAsset(c)}));
+var inPrior=function(c){return PRIOR.indexOf(c)>-1};
+var fiatAll=P.filter(function(c){return!isAsset(c)});
+var f=pick(fiatAll.filter(inPrior))+pick(fiatAll.filter(function(c){return!inPrior(c)}));
 tbodyFiat.innerHTML=f||'<tr><td colspan="3" style="color:var(--muted);text-align:center;padding:18px">'+T('nodata')+'</td></tr>';
 tbodyCr.innerHTML=pick(CRYPTO.concat(METAL))||'<tr><td colspan="3" style="color:var(--muted);text-align:center;padding:18px">'+T('nodata')+'</td></tr>';
 var bind=function(tb){var rows=tb.querySelectorAll('tr[data-c]'),i;
@@ -254,11 +265,29 @@ fetch(u).then(function(r){return r.json()}).then(function(d){
 hist=d.points||[];draw()}).catch(function(){hist=[];draw()}).finally(function(){
 busy=false;stext.textContent=T('live')+' '+fromCur+'/'+toCur;dot.classList.remove('sync')})}
 
-var refreshIn=60;
+var refreshIn=60,lastUpd=null,lastSrc=null;
+function renderUpd(){
+  var ut=id('updTime'),us=id('updSrc');
+  if(!ut)return;
+  if(!lastUpd){ut.textContent=T('updLoad');if(us)us.style.display='none';return}
+  var t=new Date(lastUpd);
+  var hh=String(t.getHours()).padStart(2,'0'),mi=String(t.getMinutes()).padStart(2,'0');
+  ut.textContent=T('updAt')+' '+hh+':'+mi+' WIB';
+  if(us){
+    us.style.display='';
+    var srcName=(T('srcMap')&&T('srcMap')[lastSrc])?T('srcMap')[lastSrc]:(lastSrc||'—');
+    var d=new Date(lastUpd);
+    var dd=String(d.getDate()).padStart(2,'0'),mo=String(d.getMonth()+1).padStart(2,'0'),yy=d.getFullYear();
+    var iso=yy+'-'+mo+'-'+dd;
+    us.innerHTML=T('srcLbl')+': <b class="src">'+esc(srcName)+'</b> · '+iso;
+  }
+}
 function loadRates(){busy=true;stext.textContent=T('loading');dot.classList.add('sync');
 fetch('/api/rates?base='+fromCur).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json()})
 .then(function(d){rates=d.rates||{};prev=d.prev||{};loading=false;
 convert();renderTable();loadHist();refreshIn=60;
+lastUpd=d.updated||new Date().toISOString();lastSrc=d.source||'';
+renderUpd();
 stext.textContent=T('live')+' '+new Date().toLocaleTimeString(LANG==='en'?'en-US':'id-ID',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
 if(typeof bcCalc==='function')bcCalc()})
 .catch(function(e){loading=false;busy=false;showErr(T('fail')+e.message+T('retry'))})
@@ -362,6 +391,21 @@ if(st)st.addEventListener('click',function(){
   var b=id('seoBody'),open=this.getAttribute('aria-expanded')==='true';
   b.hidden=open;this.setAttribute('aria-expanded',String(!open));
 });
+/* ---------- FAQ accordion ---------- */
+(function(){
+  var ft=id('faqToggle');
+  if(!ft)return;
+  ft.addEventListener('click',function(){
+    var b=id('faqBody'),open=this.getAttribute('aria-expanded')==='true';
+    b.hidden=open;this.setAttribute('aria-expanded',String(!open));
+  });
+  var qs=document.querySelectorAll('#faqBody .faq-q'),i;
+  for(i=0;i<qs.length;i++)qs[i].addEventListener('click',function(){
+    var a=this.nextElementSibling,open=this.getAttribute('aria-expanded')==='true';
+    if(open){a.style.maxHeight='0px';this.setAttribute('aria-expanded','false')}
+    else{a.style.maxHeight=a.scrollHeight+'px';this.setAttribute('aria-expanded','true')}
+  });
+})();
 
 /* ---------- jump bar: scroll cepat antar section ---------- */
 (function(){

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -76,6 +76,14 @@
   "mainEntity": [
     {
       "@type": "Question",
+      "name": "Berapa kurs 1 USD ke IDR hari ini?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Kurs USD ke IDR di MoneyMax diperbarui real-time setiap 60 detik dari beberapa penyedia data seperti ExchangeRate-API. Masukkan jumlah dan pilih USD ke IDR di konverter untuk melihat nilai tukar terkini beserta grafik pergerakan 7-90 hari."
+      }
+    },
+    {
+      "@type": "Question",
       "name": "Apakah konverter mata uang MoneyMax gratis?",
       "acceptedAnswer": {
         "@type": "Answer",
@@ -84,15 +92,23 @@
     },
     {
       "@type": "Question",
-      "name": "Berapa kurs 1 USD ke IDR hari ini?",
+      "name": "Berapa kurs EUR, SGD, dan JPY ke Rupiah?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Kurs USD ke IDR diperbarui secara real-time setiap 60 detik dari beberapa sumber data. Buka MoneyMax dan pilih USD ke IDR untuk melihat kurs terkini beserta grafik pergerakannya."
+        "text": "Buka tabel Kurs Populer di halaman MoneyMax. Pilih EUR, SGD, atau JPY untuk langsung mengonversinya ke IDR. Kurs diperbarui otomatis setiap 60 detik."
       }
     },
     {
       "@type": "Question",
-      "name": "Apakah MoneyMax menampilkan harga crypto?",
+      "name": "Bisakah saya melihat grafik pergerakan kurs historis?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Ya. Setiap pasangan mata uang memiliki grafik historis dengan rentang waktu 7, 14, 30, dan 90 hari. Tersedia pula grafik TradingView lengkap dengan indikator teknikal."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Apakah MoneyMax menampilkan harga crypto seperti Bitcoin?",
       "acceptedAnswer": {
         "@type": "Answer",
         "text": "Ya. MoneyMax mendukung Bitcoin (BTC), Ethereum (ETH), Solana (SOL), BNB, XRP, Dogecoin (DOGE), Tether (USDT), TRON (TRX), Cardano (ADA), dan Chainlink (LINK), serta emas (XAU) dan perak (XAG)."
@@ -100,10 +116,42 @@
     },
     {
       "@type": "Question",
-      "name": "Apakah data di MoneyMax akurat?",
+      "name": "Seberapa akurat kurs yang ditampilkan di MoneyMax?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Kurs ditampilkan untuk tujuan informasi dan referensi, bukan harga jual/beli resmi. Selalu verifikasi dengan bank atau money changer sebelum melakukan transaksi finansial."
+        "text": "Kurs diambil dari beberapa sumber data terpercaya dan diperbarui setiap menit. Namun kurs ini bersifat informatif, bukan kurs jual/beli resmi. Selalu verifikasi dengan bank atau money changer sebelum bertransaksi."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Bagaimana cara menghitung bea masuk dan pajak impor?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Gunakan kalkulator Bea Masuk di halaman MoneyMax. Masukkan nilai barang, ongkos kirim, asuransi, dan mata uang, maka total pajak (bea masuk 7,5%, PPN, dan PPh Pasal 22) dihitung otomatis sesuai PMK 4/2025."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Apakah MoneyMax menyimpan data pribadi saya?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Tidak. MoneyMax tidak memerlukan akun, tidak menggunakan cookie pelacak, dan tidak menyimpan aktivitas Anda di server. Preferensi seperti mata uang dan bahasa tersimpan hanya di browser Anda."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Mengapa kurs di MoneyMax berbeda dengan kurs di bank?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Bank dan money changer menerapkan margin jual/beli (spread) di atas kurs tengah internasional. MoneyMax menampilkan kurs tengah (mid rate) dari penyedia data, sehingga nilainya sedikit berbeda dari kurs jual/beli bank."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Bagaimana cara kerja auto-refresh 60 detik?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Setiap 60 detik, MoneyMax mengambil data kurs terbaru secara otomatis di latar belakang tanpa perlu memuat ulang halaman. Indikator status di kanan atas menunjukkan hitungan mundur menuju refresh berikutnya."
       }
     }
   ]
@@ -261,6 +309,9 @@ text-shadow:0 0 40px rgba(5,150,105,.15);word-break:break-all;font-variant-numer
 .chip{padding:3px 10px;border-radius:999px;font-size:11px;font-weight:700;background:rgba(255,255,255,.7);border:1px solid var(--stroke2)}
 .chip.up{color:#047857;border-color:rgba(5,150,105,.45);background:rgba(5,150,105,.12)}
 .chip.down{color:#dc2626;border-color:rgba(220,38,38,.4);background:rgba(220,38,38,.10)}
+/* === baris update + sumber data (di bawah hasil konversi) === */
+.upd{margin-top:11px;font-size:11.5px;line-height:1.55;color:var(--muted);display:flex;align-items:center;gap:7px;flex-wrap:wrap;position:relative;z-index:1}
+.upd .src{font-weight:700;color:#065f46}
 .fav{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;position:relative;z-index:1;min-height:0}
 .fav .fvlbl{font-size:10px;letter-spacing:1.6px;text-transform:uppercase;color:rgba(91,122,110,.7);width:100%;margin-bottom:-2px}
 .fav button{padding:6px 11px;border-radius:999px;font-size:11.5px;font-weight:700;cursor:pointer;color:var(--muted);
@@ -374,6 +425,15 @@ padding:0;background:none;border:0;cursor:pointer;font-size:17px;font-weight:780
 .seo-toggle[aria-expanded="true"] .seo-chevron{transform:rotate(180deg)}
 .seo-body{margin-top:14px}
 .seo-body h3{display:none}
+/* === FAQ accordion === */
+.faq-item{border:1px solid var(--stroke2);border-radius:13px;margin-bottom:9px;overflow:hidden;background:rgba(255,255,255,.6)}
+.faq-q{width:100%;display:flex;align-items:flex-start;gap:10px;padding:13px 15px;background:none;border:0;cursor:pointer;
+font-size:13.8px;text-align:left;color:#173d31;line-height:1.45;transition:background .15s}
+.faq-q:hover{background:rgba(5,150,105,.07)}
+.faq-q::before{content:"+";font-size:17px;font-weight:800;color:var(--acc);flex:none;line-height:1.2}
+.faq-q[aria-expanded="true"]::before{content:"–"}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .3s ease}
+.faq-a p{padding:0 15px 14px 37px;font-size:13.2px;line-height:1.65;color:var(--muted);margin:0}
 .scroll{max-height:320px;overflow-y:auto;border-radius:14px;position:relative;z-index:1}
 .scroll::-webkit-scrollbar{width:8px}
 .scroll::-webkit-scrollbar-thumb{background:rgba(5,150,105,.22);border-radius:99px}
@@ -419,7 +479,7 @@ background:linear-gradient(135deg,rgba(5,150,105,.16),rgba(201,151,27,.16));bord
 
 </style>
 </head>
-<body class="lang-en">
+<body class="lang-id">
 <div class="accent-bar"></div>
 <div class="tv-tape" id="tvTape"></div>
 <div class="bg"></div>
@@ -445,6 +505,7 @@ background:linear-gradient(135deg,rgba(5,150,105,.16),rgba(201,151,27,.16));bord
     <button data-j="tvCard" id="jumpTV">TradingView</button>
     <button data-j="beaCard" id="jumpBea">Bea Masuk</button>
     <button data-j="tblCard" id="jumpRate">Kurs</button>
+    <button data-j="faqSec" id="jumpFAQ">FAQ</button>
     <button data-j="trustSec" id="jumpWhy">Mengapa</button>
   </nav>
   <div class="grid">
@@ -484,6 +545,12 @@ background:linear-gradient(135deg,rgba(5,150,105,.16),rgba(201,151,27,.16));bord
         <div class="rate" id="rateLine">—</div>
       </div>
       <div class="err" id="err" role="alert"></div>
+      <div class="upd" id="updLine">
+        <span aria-hidden="true">🕐</span>
+        <span id="updTime">kurs sedang dimuat…</span>
+        <span style="opacity:.55">·</span>
+        <span id="updSrc">sumber: <b class="src">open.er-api.com</b></span>
+      </div>
     </section>
     <section class="glass card card-pad" id="chartCard" aria-label="Grafik pergerakan kurs">
       <div class="chart-head">
@@ -556,6 +623,58 @@ background:linear-gradient(135deg,rgba(5,150,105,.16),rgba(201,151,27,.16));bord
             <tbody id="tbodyCr"><tr><td colspan="3"><div class="sk" style="height:14px;margin:6px 0"></div></td></tr></tbody>
           </table>
         </div>
+      </div>
+    </div>
+  </section>
+  <section class="glass card card-pad seo faq-sec" id="faqSec" style="margin-top:22px">
+    <button class="seo-toggle" id="faqToggle" aria-expanded="false" aria-controls="faqBody">
+      <span data-i="faqT">Pertanyaan yang Sering Diajukan</span>
+      <span class="seo-chevron" aria-hidden="true">⌄</span>
+    </button>
+    <div class="seo-body" id="faqBody" hidden>
+      <div lang="id" class="lang-block lang-id faq">
+        <div class="faq-item"><button class="faq-q" aria-expanded="false"><b>1. Berapa kurs 1 USD ke IDR hari ini?</b></button>
+          <div class="faq-a"><p>Kurs USD ke IDR di MoneyMax diperbarui real-time setiap 60 detik dari beberapa penyedia data seperti ExchangeRate-API. Masukkan jumlah dan pilih USD → IDR di konverter untuk melihat nilai tukar terkini beserta grafik pergerakan 7–90 hari.</p></div></div>
+        <div class="faq-item"><button class="faq-q" aria-expanded="false"><b>2. Apakah konverter mata uang MoneyMax gratis?</b></button>
+          <div class="faq-a"><p>Ya. MoneyMax sepenuhnya gratis, tanpa akun, tanpa langganan, dan tanpa batasan jumlah konversi. Tidak ada iklan pop-up yang mengganggu.</p></div></div>
+        <div class="faq-item"><button class="faq-q" aria-expanded="false"><b>3. Berapa kurs Euro (EUR), Dolar Singapura (SGD), dan Yen Jepang (JPY) ke Rupiah?</b></button>
+          <div class="faq-a"><p>Buka tabel "Kurs Populer" di halaman ini. Pilih EUR, SGD, atau JPY untuk langsung mengonversinya ke IDR atau mata uang lainnya. Kurs diperbarui otomatis setiap 60 detik.</p></div></div>
+        <div class="faq-item"><button class="faq-q" aria-expanded="false"><b>4. Bisakah saya melihat grafik pergerakan kurs?</b></button>
+          <div class="faq-a"><p>Tentu. Setiap pasangan mata uang memiliki grafik historis dengan rentang waktu 7 hari, 14 hari, 30 hari, dan 90 hari. Tersedia pula grafik TradingView lengkap dengan indikator teknikal untuk analisa pasar yang lebih dalam.</p></div></div>
+        <div class="faq-item"><button class="faq-q" aria-expanded="false"><b>5. Apakah MoneyMax menampilkan harga crypto seperti Bitcoin?</b></button>
+          <div class="faq-a"><p>Ya. MoneyMax mendukung Bitcoin (BTC), Ethereum (ETH), Solana (SOL), BNB, XRP, Dogecoin (DOGE), Tether (USDT), TRON (TRX), Cardano (ADA), dan Chainlink (LINK), serta harga emas (XAU) dan perak (XAG) per troy ounce.</p></div></div>
+        <div class="faq-item"><button class="faq-q" aria-expanded="false"><b>6. Seberapa akurat kurs yang ditampilkan?</b></button>
+          <div class="faq-a"><p>Kurs diambil dari beberapa sumber data terpercaya dan diperbarui setiap menit. Namun, kurs ini bersifat informatif — bukan kurs jual/beli resmi. Selalu verifikasi dengan bank atau money changer sebelum bertransaksi.</p></div></div>
+        <div class="faq-item"><button class="faq-q" aria-expanded="false"><b>7. Bagaimana cara menghitung bea masuk dan pajak impor?</b></button>
+          <div class="faq-a"><p>Gunakan kalkulator "Bea Masuk" di halaman ini. Masukkan nilai barang, ongkos kirim, asuransi, dan mata uang — total pajak (bea masuk 7,5%, PPN, dan PPh Pasal 22) dihitung otomatis sesuai PMK 4/2025.</p></div></div>
+        <div class="faq-item"><button class="faq-q" aria-expanded="false"><b>8. Apakah MoneyMax menyimpan data pribadi saya?</b></button>
+          <div class="faq-a"><p>Tidak. MoneyMax tidak memerlukan akun, tidak menggunakan cookie pelacak, dan tidak menyimpan aktivitas Anda di server. Preferensi seperti mata uang dan bahasa tersimpan hanya di browser Anda (localStorage).</p></div></div>
+        <div class="faq-item"><button class="faq-q" aria-expanded="false"><b>9. Mengapa kurs di MoneyMax berbeda dengan di bank?</b></button>
+          <div class="faq-a"><p>Bank dan money changer menerapkan margin jual/beli (spread) di atas kurs tengah internasional. MoneyMax menampilkan kurs tengah (mid rate) dari penyedia data, sehingga nilainya sedikit berbeda dari kurs jual/beli bank.</p></div></div>
+        <div class="faq-item"><button class="faq-q" aria-expanded="false"><b>10. Bagaimana cara kerja auto-refresh 60 detik?</b></button>
+          <div class="faq-a"><p>Setiap 60 detik, MoneyMax mengambil data kurs terbaru secara otomatis di latar belakang tanpa perlu memuat ulang halaman. Indikator status di kanan atas menunjukkan hitungan mundur menuju refresh berikutnya.</p></div></div>
+      </div>
+      <div lang="en" class="lang-block lang-en faq">
+        <div class="faq-item"><button class="faq-q" aria-expanded="false"><b>1. What is the USD to IDR exchange rate today?</b></button>
+          <div class="faq-a"><p>The USD to IDR rate on MoneyMax updates in real time every 60 seconds from multiple data providers such as ExchangeRate-API. Enter an amount and pick USD → IDR in the converter to see the current rate plus a 7–90 day movement chart.</p></div></div>
+        <div class="faq-item"><button class="faq-q" aria-expanded="false"><b>2. Is the MoneyMax currency converter free?</b></button>
+          <div class="faq-a"><p>Yes. MoneyMax is completely free — no account, no subscription, and no limit on the number of conversions. No intrusive pop-up ads either.</p></div></div>
+        <div class="faq-item"><button class="faq-q" aria-expanded="false"><b>3. What are the EUR, SGD, and JPY to Rupiah rates?</b></button>
+          <div class="faq-a"><p>Open the "Popular Rates" table on this page. Pick EUR, SGD, or JPY to instantly convert it to IDR or any other currency. Rates auto-refresh every 60 seconds.</p></div></div>
+        <div class="faq-item"><button class="faq-q" aria-expanded="false"><b>4. Can I see exchange rate charts?</b></button>
+          <div class="faq-a"><p>Yes. Every currency pair has a historical chart with 7-day, 14-day, 30-day, and 90-day ranges. A TradingView chart with technical indicators is also available for deeper market analysis.</p></div></div>
+        <div class="faq-item"><button class="faq-q" aria-expanded="false"><b>5. Does MoneyMax show crypto prices like Bitcoin?</b></button>
+          <div class="faq-a"><p>Yes. MoneyMax supports Bitcoin (BTC), Ethereum (ETH), Solana (SOL), BNB, XRP, Dogecoin (DOGE), Tether (USDT), TRON (TRX), Cardano (ADA), and Chainlink (LINK), plus gold (XAU) and silver (XAG) prices per troy ounce.</p></div></div>
+        <div class="faq-item"><button class="faq-q" aria-expanded="false"><b>6. How accurate are the rates shown?</b></button>
+          <div class="faq-a"><p>Rates are aggregated from several trusted providers and refreshed every minute. However, they are indicative mid rates — not official buy/sell prices. Always verify with your bank or money changer before transacting.</p></div></div>
+        <div class="faq-item"><button class="faq-q" aria-expanded="false"><b>7. How do I calculate import duty and taxes?</b></button>
+          <div class="faq-a"><p>Use the "Import Duty" calculator on this page. Enter the goods value, shipping, insurance, and currency — total taxes (7.5% duty, VAT, and income tax Art. 22) are computed automatically per PMK 4/2025.</p></div></div>
+        <div class="faq-item"><button class="faq-q" aria-expanded="false"><b>8. Does MoneyMax store my personal data?</b></button>
+          <div class="faq-a"><p>No. MoneyMax requires no account, uses no tracking cookies, and stores no activity on its servers. Preferences such as currency and language are kept locally in your browser (localStorage) only.</p></div></div>
+        <div class="faq-item"><button class="faq-q" aria-expanded="false"><b>9. Why do rates differ from my bank's?</b></button>
+          <div class="faq-a"><p>Banks and money changers apply a buy/sell spread on top of the international mid rate. MoneyMax shows the mid rate from data providers, so values differ slightly from bank buy/sell rates.</p></div></div>
+        <div class="faq-item"><button class="faq-q" aria-expanded="false"><b>10. How does the 60-second auto-refresh work?</b></button>
+          <div class="faq-a"><p>Every 60 seconds MoneyMax fetches the latest rates automatically in the background, without reloading the page. The status indicator in the top right shows the countdown to the next refresh.</p></div></div>
       </div>
     </div>
   </section>
@@ -667,7 +786,7 @@ background:linear-gradient(135deg,rgba(5,150,105,.16),rgba(201,151,27,.16));bord
   <footer>
     MoneyMax · Data: open.er-api.com · frankfurter.dev · coingecko · gold-api · currency-api<br>
     <span id="foot1">160+ fiat · 10 crypto · emas & perak · auto-refresh 60 detik</span><br>
-    <a href="/privacy" id="foot2">Kebijakan Privasi</a> · <a href="/terms" id="foot3">Ketentuan Layanan</a> · <a href="/disclaimer" id="foot4">Disclaimer</a><br>
+    <a href="/about" id="foot5">Tentang</a> · <a href="/contact" id="foot6">Kontak</a> · <a href="/privacy" id="foot2">Kebijakan Privasi</a> · <a href="/terms" id="foot3">Ketentuan Layanan</a> · <a href="/disclaimer" id="foot4">Disclaimer</a><br>
     © 2026 <a href="https://moneymax-gold.vercel.app">moneymax-gold.vercel.app</a>
   </footer>
 </div>

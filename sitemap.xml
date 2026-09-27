@@ -7,6 +7,18 @@
     <lastmod>2026-09-26</lastmod>
   </url>
   <url>
+    <loc>https://moneymax-gold.vercel.app/about</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <lastmod>2026-09-27</lastmod>
+  </url>
+  <url>
+    <loc>https://moneymax-gold.vercel.app/contact</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <lastmod>2026-09-27</lastmod>
+  </url>
+  <url>
     <loc>https://moneymax-gold.vercel.app/privacy</loc>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
