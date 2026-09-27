@@ -22,13 +22,14 @@ var STR={
   swapA:'Tukar mata uang asal dan tujuan',swapT:'Tukar posisi (S)',
   crypto:'Crypto',metal:'Logam',rangeLbl:'Rentang waktu',rangeA:'Rentang waktu grafik',
   tblFi:'Mata Uang',tblCr:'Crypto & Logam',tbl24:'Perubahan 24H',thA:'Aset',
-  seoTentang:'Tentang Konverter Mata Uang MoneyMax',jumpConv:'Konverter',jumpChart:'Grafik',jumpTV:'TradingView',jumpBea:'Bea Masuk',jumpRate:'Kurs',
+  seoTentang:'Tentang Konverter Mata Uang MoneyMax',jumpConv:'Konverter',jumpChart:'Grafik',jumpTV:'TradingView',jumpBea:'Bea Masuk',jumpRate:'Kurs',jumpWhy:'Mengapa',
   bcNilaiPabean:'Nilai Pabean (CIF)',bcBea:'Bea Masuk',bcPpn:'PPN 11%',bcPph:'PPh 22 Impor',
   bcTotal:'Total Pajak',bcLanded:'Total Biaya Lengkap (barang + pajak)',
   t1:'100% Gratis',t1s:'Tanpa akun, tanpa biaya, tanpa batas konversi',
   t2:'Real-Time',t2s:'Kurs diperbarui otomatis setiap 60 detik',
   t3:'Privasi Aman',t3s:'Tanpa cookie pelacak, tanpa penyimpanan data',
   t4:'Grafik Historis',t4s:'Pantau pergerakan kurs 7–90 hari',
+  trustT:'Mengapa MoneyMax?',
   foot1:'160+ fiat · 10 crypto · emas & perak · auto-refresh 60 detik',
   foot2:'Kebijakan Privasi',foot3:'Ketentuan Layanan',foot4:'Disclaimer',
   heroT:'Konversi Mata Uang,',heroE:'Crypto & Emas',
@@ -44,13 +45,14 @@ var STR={
   swapA:'Swap source and target currency',swapT:'Swap position (S)',
   crypto:'Crypto',metal:'Metal',rangeLbl:'Time range',rangeA:'Chart time range',
   tblFi:'Fiat Currencies',tblCr:'Crypto & Metals',tbl24:'24H Change',thA:'Asset',
-  seoTentang:'About the MoneyMax Currency Converter',jumpConv:'Converter',jumpChart:'Chart',jumpTV:'TradingView',jumpBea:'Import Tax',jumpRate:'Rates',
+  seoTentang:'About the MoneyMax Currency Converter',jumpConv:'Converter',jumpChart:'Chart',jumpTV:'TradingView',jumpBea:'Import Tax',jumpRate:'Rates',jumpWhy:'Why',
   bcNilaiPabean:'Customs Value (CIF)',bcBea:'Import Duty',bcPpn:'VAT',bcPph:'Income Tax Art.22',
   bcTotal:'Total Tax',bcLanded:'Landed Cost (goods + tax)',
   t1:'100% Free',t1s:'No account, no fees, unlimited conversions',
   t2:'Real-Time',t2s:'Rates auto-update every 60 seconds',
   t3:'Privacy Safe',t3s:'No tracking cookies, no data stored',
   t4:'Historical Charts',t4s:'Track rate movement over 7–90 days',
+  trustT:'Why MoneyMax?',
   foot1:'160+ fiat · 10 cryptos · gold & silver · auto-refresh every 60s',
   foot2:'Privacy Policy',foot3:'Terms of Service',foot4:'Disclaimer',
   heroT:'Convert Currency,',heroE:'Crypto & Gold',
@@ -84,11 +86,11 @@ function applyLang(){
  id('rangeLbl').textContent=T('rangeLbl');
  id('range').setAttribute('aria-label',T('rangeA'));
  if(tvReady)tvRender();
- var jl={jumpConv:'jumpConv',jumpChart:'jumpChart',jumpTV:'jumpTV',jumpBea:'jumpBea',jumpRate:'jumpRate'};
+ var jl={jumpConv:'jumpConv',jumpChart:'jumpChart',jumpTV:'jumpTV',jumpBea:'jumpBea',jumpRate:'jumpRate',jumpWhy:'jumpWhy'};
  var jb=id('jumpto');
  if(jb){var jbt=jb.querySelectorAll('button'),k=0;
  for(k=0;k<jbt.length;k++){var jk=jbt[k].dataset.j;if(jl[jk])jbt[k].textContent=T(jl[jk])}}
- var tr={trust1:'t1',trust1s:'t1s',trust2:'t2',trust2s:'t2s',trust3:'t3',trust3s:'t3s',trust4:'t4',trust4s:'t4s'};
+ var tr={trust1:'t1',trust1s:'t1s',trust2:'t2',trust2s:'t2s',trust3:'t3',trust3s:'t3s',trust4:'t4',trust4s:'t4s',trustT:'trustT'};
  var els=document.querySelectorAll('[data-i]'),i;
  for(i=0;i<els.length;i++){var k=els[i].getAttribute('data-i');
  if(tr[k])els[i].textContent=T(tr[k])}
@@ -337,7 +339,13 @@ days=+this.dataset.d;
 for(var j=0;j<rb.length;j++){rb[j].classList.remove('on');rb[j].setAttribute('aria-pressed','false')}
 this.classList.add('on');this.setAttribute('aria-pressed','true');loadHist()});
 window.addEventListener('resize',function(){clearTimeout(timer);timer=setTimeout(draw,150)});
-// hemat CPU: skip redraw canvas saat tidak terlihat (di luar viewport)
+// trust bar collapsible (di bagian bawah, default minimize)
+var th=id('trustH');
+if(th){th.addEventListener('click',function(){
+  var b=id('trustBody'),open=b.hasAttribute('hidden');
+  if(open){b.removeAttribute('hidden')}else{b.setAttribute('hidden','')}
+  th.setAttribute('aria-expanded',String(open));
+});}
 var cvVisible=true;
 if('IntersectionObserver' in window){
   new IntersectionObserver(function(es){

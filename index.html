@@ -393,9 +393,15 @@ transition:transform .3s cubic-bezier(.4,1.5,.5,1),opacity .3s;pointer-events:no
 .toast.show{transform:translateX(-50%) translateY(0);opacity:1}
 .sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 /* === Trust bar === */
-.trust{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:22px}
-@media(max-width:920px){.trust{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:480px){.trust{grid-template-columns:1fr}}
+.trust-body{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:12px;padding-top:4px;
+border-top:1px dashed var(--stroke)}
+@media(max-width:920px){.trust-body{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:480px){.trust-body{grid-template-columns:1fr}}
+.trust-h{display:flex;align-items:center;gap:9px;width:100%;background:none;border:0;cursor:pointer;
+padding:0;font-size:15px;font-weight:750;color:var(--ink);text-align:left}
+.trust-h:hover{color:var(--acc)}
+.trust-h-ic{display:inline-block;transition:transform .2s;color:var(--acc);font-size:14px;line-height:1}
+.trust-h[aria-expanded="true"] .trust-h-ic{transform:rotate(90deg)}
 .trust-item{display:flex;align-items:flex-start;gap:10px;padding:14px 15px;border-radius:16px;
 background:rgba(255,255,255,.72);border:1px solid var(--stroke2);
 box-shadow:0 4px 16px -6px rgba(4,120,87,.18)}
@@ -433,18 +439,13 @@ background:linear-gradient(135deg,rgba(5,150,105,.16),rgba(201,151,27,.16));bord
     <h2><span id="heroT">Konversi Mata Uang,</span> <em id="heroE">Crypto & Emas</em> Real-Time</h2>
     <p id="heroP">160+ mata uang dunia, 10 crypto, emas & perak — kurs live, grafik historis, auto-refresh 60 detik.</p>
   </div>
-  <section class="trust">
-    <div class="trust-item"><span class="ti-ic">✓</span><div><b data-i="trust1">100% Gratis</b><br><small data-i="trust1s">Tanpa akun, tanpa biaya, tanpa batas konversi</small></div></div>
-    <div class="trust-item"><span class="ti-ic">⚡</span><div><b data-i="trust2">Real-Time</b><br><small data-i="trust2s">Kurs diperbarui otomatis setiap 60 detik</small></div></div>
-    <div class="trust-item"><span class="ti-ic">🔒</span><div><b data-i="trust3">Privasi Aman</b><br><small data-i="trust3s">Tanpa cookie pelacak, tanpa penyimpanan data</small></div></div>
-    <div class="trust-item"><span class="ti-ic">📈</span><div><b data-i="trust4">Grafik Historis</b><br><small data-i="trust4s">Pantau pergerakan kurs 7–90 hari</small></div></div>
-  </section>
   <nav class="jumpto" id="jumpto" aria-label="Lompat ke bagian">
     <button data-j="converter" class="on" id="jumpConv">Konverter</button>
     <button data-j="chartCard" id="jumpChart">Grafik</button>
     <button data-j="tvCard" id="jumpTV">TradingView</button>
     <button data-j="beaCard" id="jumpBea">Bea Masuk</button>
     <button data-j="tblCard" id="jumpRate">Kurs</button>
+    <button data-j="trustSec" id="jumpWhy">Mengapa</button>
   </nav>
   <div class="grid">
     <section class="glass card card-pad" aria-label="Konverter" id="converter">
@@ -649,6 +650,18 @@ background:linear-gradient(135deg,rgba(5,150,105,.16),rgba(201,151,27,.16));bord
     monitoring FX rates, crypto investors calculating portfolio value in Rupiah, and anyone who needs
     the latest exchange rates fast and free.</p>
     </div>
+    </div>
+  </section>
+  <section class="trust-sec glass card card-pad" id="trustSec" style="margin-top:22px">
+    <button class="trust-h" id="trustH" type="button" aria-expanded="false" aria-controls="trustBody">
+      <span class="trust-h-ic" id="trustArrow">▸</span>
+      <span data-i="trustT">Mengapa MoneyMax?</span>
+    </button>
+    <div class="trust-body" id="trustBody" hidden>
+      <div class="trust-item"><span class="ti-ic">✓</span><div><b data-i="trust1">100% Gratis</b><br><small data-i="trust1s">Tanpa akun, tanpa biaya, tanpa batas konversi</small></div></div>
+      <div class="trust-item"><span class="ti-ic">⚡</span><div><b data-i="trust2">Real-Time</b><br><small data-i="trust2s">Kurs diperbarui otomatis setiap 60 detik</small></div></div>
+      <div class="trust-item"><span class="ti-ic">🔒</span><div><b data-i="trust3">Privasi Aman</b><br><small data-i="trust3s">Tanpa cookie pelacak, tanpa penyimpanan data</small></div></div>
+      <div class="trust-item"><span class="ti-ic">📈</span><div><b data-i="trust4">Grafik Historis</b><br><small data-i="trust4s">Pantau pergerakan kurs 7–90 hari</small></div></div>
     </div>
   </section>
   <footer>
